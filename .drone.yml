@@ -1,0 +1,150 @@
+---
+kind: pipeline
+type: docker
+name: snapshot-publish
+
+trigger:
+  branch:
+    - develop
+
+volumes:
+  - name: m2
+    host:
+      path: /drone/volume/m2
+
+steps:
+
+  - name: publish
+    image: maven:3.8.5-openjdk-17
+    privileged: true
+    volumes:
+      - name: m2
+        path: /root/.m2/repository
+    environment:
+      MAVEN_SETTINGS:
+        from_secret: MAVEN_SETTINGS
+    commands:
+      - echo "$MAVEN_SETTINGS" >> maven-settings.xml
+      - mvn --settings maven-settings.xml -U -P snapshot clean deploy
+
+#---
+#kind: pipeline
+#type: docker
+#name: release-maven-central
+#
+#trigger:
+#  ref:
+#    - refs/tags/v.*.*.*
+#
+#volumes:
+#  - name: m2
+#    host:
+#      path: /drone/volume/m2
+#
+#steps:
+#
+#  - name: publish maven central
+#    image: maven:3.8.5-openjdk-17
+#    privileged: true
+#    volumes:
+#      - name: m2
+#        path: /root/.m2/repository
+#    environment:
+#      GPG_PRIVATE_KEY:
+#        from_secret: GPG_PRIVATE_KEY
+#      MAVEN_SETTINGS:
+#        from_secret: MAVEN_SETTINGS
+#      GPG_PASSPHRASE:
+#        from_secret: GPG_PASSPHRASE
+#    commands:
+#      - echo "$GPG_PRIVATE_KEY" >> gpg.key
+#      - echo "$MAVEN_SETTINGS" >> maven-settings.xml
+#      - gpg --pinentry-mode loopback --passphrase $GPG_PASSPHRASE --import gpg.key
+#      - mvn --settings maven-settings.xml -U -P ossrh,release clean deploy
+#
+#---
+#kind: pipeline
+#type: docker
+#name: release-struchkov-nexus
+#
+#trigger:
+#  ref:
+#    - refs/tags/v.*.*.*
+#
+#volumes:
+#  - name: m2
+#    host:
+#      path: /drone/volume/m2
+#
+#steps:
+#
+#  - name: publish struchkov nexus
+#    image: maven:3.8.5-openjdk-17
+#    privileged: true
+#    volumes:
+#      - name: m2
+#        path: /root/.m2/repository
+#    environment:
+#      GPG_PRIVATE_KEY:
+#        from_secret: GPG_PRIVATE_KEY
+#      MAVEN_SETTINGS:
+#        from_secret: MAVEN_SETTINGS
+#      GPG_PASSPHRASE:
+#        from_secret: GPG_PASSPHRASE
+#    commands:
+#      - echo "$GPG_PRIVATE_KEY" >> gpg.key
+#      - echo "$MAVEN_SETTINGS" >> maven-settings.xml
+#      - gpg --pinentry-mode loopback --passphrase $GPG_PASSPHRASE --import gpg.key
+#      - mvn --settings maven-settings.xml -U -P ossrh,release-struchkov-nexus clean deploy
+#
+#---
+#kind: pipeline
+#type: docker
+#name: create-develop-docs-site
+#
+#trigger:
+#  branch:
+#    - develop
+#    - docs
+#
+#clone:
+#  disable: true
+#
+#steps:
+#
+#  - name: build docs
+#    image: git.struchkov.dev/upagge/mkdocs-material-insiders:latest
+#    volumes:
+#      - name: mkdocs_cache
+#        path: ${DRONE_WORKSPACE}/documentation/ru/.cache
+#    environment:
+#      GIT_SSH:
+#        from_secret: GIT_SSH
+#      GIT_SSH_COMMAND: "ssh -i ~/.ssh/id_rsa -p 222"
+#    commands:
+#      - eval $(ssh-agent -s)
+#      - mkdir -p ~/.ssh
+#      - chmod 700 ~/.ssh
+#      - echo "$GIT_SSH" >> ~/.ssh/id_rsa
+#      - chmod 600 ~/.ssh/id_rsa
+#      - ssh-keyscan -p 222 git.struchkov.dev >> ~/.ssh/known_hosts
+#      - chmod 644 ~/.ssh/known_hosts
+#      - git config --global user.name "${DRONE_COMMIT_AUTHOR_NAME}"
+#      - git config --global user.email "${DRONE_COMMIT_AUTHOR_EMAIL}"
+#      - git clone ${DRONE_GIT_SSH_URL} .
+#      - git checkout $DRONE_COMMIT
+#      - cd documentation/spring/ru
+#      - mike deploy --prefix godfather-telegram/spring/ru --branch docs-deploy --push --update-aliases develop
+#
+#image_pull_secrets:
+#  - DOCKER_AUTH
+#
+#volumes:
+#  - name: mkdocs_cache
+#    host:
+#      path: /drone/volume/mkdocs_cache/godfather_telegram/spring/ru
+---
+kind: signature
+hmac: 6c79b5d92e5003205bd6ed78ab0b3258665406750751e97354b630ac34c8657e
+
+...
