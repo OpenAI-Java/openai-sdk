@@ -3,6 +3,9 @@ package dev.struchkov.openai.domain.model.gpt;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 @Getter
 @RequiredArgsConstructor
 public enum GPT3Model implements GPTModel {
@@ -13,5 +16,11 @@ public enum GPT3Model implements GPTModel {
     TEXT_DAVINCI_002("text-davinci-002");
 
     private final String value;
+
+    public static Optional<GPT3Model> findByValue(String value) {
+        return Arrays.stream(values())
+                .filter(e -> e.getValue().equals(value))
+                .findFirst();
+    }
 
 }

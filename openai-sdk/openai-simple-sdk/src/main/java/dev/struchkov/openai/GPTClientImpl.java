@@ -6,6 +6,7 @@ import dev.struchkov.openai.context.GPTClient;
 import dev.struchkov.openai.domain.conf.GPTConfig;
 import dev.struchkov.openai.domain.model.gpt.GPT3Model;
 import dev.struchkov.openai.domain.model.gpt.GPT4Model;
+import dev.struchkov.openai.domain.model.gpt.GPTModel;
 import dev.struchkov.openai.domain.request.GptRequest;
 import dev.struchkov.openai.domain.response.GptResponse;
 import dev.struchkov.openai.domain.response.error.GptErrorDetail;
@@ -38,6 +39,7 @@ public class GPTClientImpl implements GPTClient {
         gson = new GsonBuilder()
                 .registerTypeAdapter(GPT3Model.class, aiModelGsonSer)
                 .registerTypeAdapter(GPT4Model.class, aiModelGsonSer)
+                .registerTypeAdapter(GPTModel.class, aiModelGsonSer)
                 .create();
     }
 
@@ -92,8 +94,7 @@ public class GPTClientImpl implements GPTClient {
         if (checkNotBlank(openAiOrg)) {
             requestBuilder.header("OpenAI-Organization", openAiOrg);
         }
-        final Request request = requestBuilder.build();
-        return request;
+        return requestBuilder.build();
     }
 
 }

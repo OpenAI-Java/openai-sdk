@@ -5,28 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>dev.struchkov.openai</groupId>
-        <artifactId>openai-sdk</artifactId>
+        <artifactId>openai-parent-sdk</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>openai-main-sdk</artifactId>
+    <artifactId>openai-data</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>openai-simple-data-local</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>dev.struchkov.openai</groupId>
-            <artifactId>openai-main-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.struchkov.haiti</groupId>
-            <artifactId>haiti-utils</artifactId>
-        </dependency>
-    </dependencies>
-
 
 </project>

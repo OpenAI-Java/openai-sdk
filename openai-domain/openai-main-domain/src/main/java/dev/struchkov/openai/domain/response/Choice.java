@@ -9,5 +9,7 @@ import lombok.Setter;
 public class Choice {
 
     private GptMessage message;
+    private String finishReason;
+    private Long index;
 
 }

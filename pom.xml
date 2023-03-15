@@ -14,6 +14,7 @@
         <module>openai-sdk</module>
         <module>openai-context</module>
         <module>openai-exception</module>
+        <module>openai-data</module>
     </modules>
 
     <properties>
@@ -26,6 +27,7 @@
         <okhttp.version>4.10.0</okhttp.version>
         <gson.version>2.10.1</gson.version>
         <lombok.version>1.18.26</lombok.version>
+        <uuid.creator.version>5.2.0</uuid.creator.version>
 
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
         <plugin.maven.compiler.ver>3.10.1</plugin.maven.compiler.ver>
@@ -73,6 +75,12 @@
 
             <dependency>
                 <groupId>dev.struchkov.openai</groupId>
+                <artifactId>openapi-data-local</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>dev.struchkov.openai</groupId>
                 <artifactId>openai-main-sdk</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -108,6 +116,12 @@
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.f4b6a3</groupId>
+                <artifactId>uuid-creator</artifactId>
+                <version>${uuid.creator.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

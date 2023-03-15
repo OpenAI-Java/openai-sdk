@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>dev.struchkov.openai</groupId>
-        <artifactId>openai-sdk</artifactId>
+        <artifactId>openai-data</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>openai-main-sdk</artifactId>
+    <artifactId>openai-simple-data-local</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -20,13 +20,12 @@
     <dependencies>
         <dependency>
             <groupId>dev.struchkov.openai</groupId>
-            <artifactId>openai-main-context</artifactId>
+            <artifactId>openai-simple-context</artifactId>
         </dependency>
         <dependency>
-            <groupId>dev.struchkov.haiti</groupId>
-            <artifactId>haiti-utils</artifactId>
+            <groupId>com.github.f4b6a3</groupId>
+            <artifactId>uuid-creator</artifactId>
         </dependency>
     </dependencies>
-
 
 </project>

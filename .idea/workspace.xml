@@ -4,45 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6d20ad6d-fe43-45c0-a314-f9d0dcfd5496" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.drone.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-context/openai-main-context/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-context/openai-simple-context/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-context/openai-simple-context/src/main/java/dev/struchkov/openai/context/GPTClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-context/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/common/GptMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/conf/GPTConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/conf/OpenAIConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/model/AIModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/model/gpt/GPT3Model.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/model/gpt/GPT4Model.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/model/gpt/GPTModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/request/GptRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/response/Choice.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/response/GptResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/response/error/GptErrorDetail.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/response/error/GptErrorResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/openai-simple-domain/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-domain/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-exception/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-exception/src/main/java/dev/struchkov/openai/exception/OpenAIApiException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-exception/src/main/java/dev/struchkov/openai/exception/gpt/OpenAIGptApiException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-sdk/openai-main-sdk/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-sdk/openai-simple-sdk/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-sdk/openai-simple-sdk/src/main/java/dev/struchkov/openai/GPTClientImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-sdk/openai-simple-sdk/src/main/java/dev/struchkov/openai/util/AIModelGsonSer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai-sdk/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    <list default="true" id="6d20ad6d-fe43-45c0-a314-f9d0dcfd5496" name="Changes" comment="create cicd">
+      <change afterPath="$PROJECT_DIR$/openai-context/openai-simple-context/src/main/java/dev/struchkov/openai/context/ChatGptService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/openai-context/openai-simple-context/src/main/java/dev/struchkov/openai/context/data/ChatGptStorage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/openai-data/openai-simple-data-local/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/openai-data/openai-simple-data-local/src/main/java/dev/struchkov/openai/data/local/ChatGptLocalStorage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/openai-data/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/chat/ChatInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/chat/ChatMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/response/Usage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/openai-sdk/openai-simple-sdk/src/main/java/dev/struchkov/openai/ChatGptServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/common/GptMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/common/GptMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/model/gpt/GPT3Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/model/gpt/GPT3Model.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/model/gpt/GPT4Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/model/gpt/GPT4Model.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/request/GptRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/request/GptRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/response/Choice.java" beforeDir="false" afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/response/Choice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/response/GptResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/openai-domain/openai-main-domain/src/main/java/dev/struchkov/openai/domain/response/GptResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai-sdk/openai-main-sdk/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/openai-sdk/openai-main-sdk/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai-sdk/openai-simple-sdk/src/main/java/dev/struchkov/openai/GPTClientImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/openai-sdk/openai-simple-sdk/src/main/java/dev/struchkov/openai/GPTClientImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai-sdk/openai-simple-sdk/src/main/java/dev/struchkov/openai/util/AIModelGsonSer.java" beforeDir="false" afterPath="$PROJECT_DIR$/openai-sdk/openai-main-sdk/src/main/java/dev/struchkov/openai/util/AIModelGsonSer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+      <option value="module" />
+    </option>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -53,6 +47,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -76,23 +75,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "jdk.selected.JAVA_MODULE": "tsc-correto-m1-17",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-m1-17&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/openai-data" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="dev.struchkov.openai.domain.response" />
       <recent name="dev.struchkov.openai.domain.common" />
@@ -137,11 +141,33 @@
       <updated>1678821064341</updated>
       <workItem from="1678821065571" duration="6878000" />
       <workItem from="1678828017201" duration="1717000" />
-      <workItem from="1678829767948" duration="15000" />
+      <workItem from="1678829767948" duration="890000" />
+      <workItem from="1678831004627" duration="5226000" />
+      <workItem from="1678860252537" duration="3781000" />
     </task>
+    <task id="LOCAL-00001" summary="InitCommit">
+      <created>1678829955494</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1678829955494</updated>
+    </task>
+    <task id="LOCAL-00002" summary="create cicd">
+      <created>1678830108371</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1678830108371</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="InitCommit" />
+    <MESSAGE value="create cicd" />
+    <option name="LAST_COMMIT_MESSAGE" value="create cicd" />
   </component>
 </project>

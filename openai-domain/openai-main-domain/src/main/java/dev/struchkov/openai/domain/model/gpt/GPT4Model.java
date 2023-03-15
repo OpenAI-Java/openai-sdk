@@ -3,6 +3,9 @@ package dev.struchkov.openai.domain.model.gpt;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 /**
  * @author upagge 14.03.2023
  */
@@ -31,5 +34,11 @@ public enum GPT4Model implements GPTModel {
     GPT_4_32_K_0314("gpt-4-32k-0314");
 
     private final String value;
+
+    public static Optional<GPT4Model> findByValue(String value) {
+        return Arrays.stream(values())
+                .filter(e -> e.getValue().equals(value))
+                .findFirst();
+    }
 
 }
