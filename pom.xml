@@ -7,6 +7,15 @@
     <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <name>OpenAI SDK Java</name>
+    <description>Client for working with OpenAI API</description>
+    <url>https://git.struchkov.dev/openai/openai-sdk</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/OpenAI-Java/openai-sdk/issues</url>
