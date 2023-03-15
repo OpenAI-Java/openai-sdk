@@ -96,8 +96,7 @@ steps:
       - echo "$MAVEN_SETTINGS" >> maven-settings.xml
       - gpg --pinentry-mode loopback --passphrase $GPG_PASSPHRASE --import gpg.key
       - mvn --settings maven-settings.xml -U -P ossrh,release-struchkov-nexus clean deploy
-
----
+#---
 #kind: pipeline
 #type: docker
 #name: create-develop-docs-site
@@ -145,6 +144,6 @@ steps:
 #      path: /drone/volume/mkdocs_cache/godfather_telegram/spring/ru
 ---
 kind: signature
-hmac: 5570f4b29d1eea10a076ebf0eebdbee38a46199aea3eadf76b82fc01d612fe80
+hmac: 4f741025c597d3ecfc001fba410c56863fb4481a911b289b3faec462136cdc38
 
 ...
