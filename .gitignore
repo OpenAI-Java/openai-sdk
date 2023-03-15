@@ -23,7 +23,6 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 .project
 .classpath
-.idea
 cmake-build-*/
 *.iws
 out/
@@ -75,3 +74,4 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+/.idea/

@@ -9,6 +9,11 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/OpenAI-Java/openai-sdk/issues</url>
+    </issueManagement>
+
     <modules>
         <module>openai-domain</module>
         <module>openai-sdk</module>
@@ -349,6 +354,12 @@
             </build>
         </profile>
     </profiles>
+
+    <scm>
+        <connection>scm:git:ssh://git@git.struchkov.dev:222/openai/openai-sdk.git</connection>
+        <url>https://git.struchkov.dev/openai/openai-sdk</url>
+        <developerConnection>scm:git:ssh://git@git.struchkov.dev:222/openai/openai-sdk.git</developerConnection>
+    </scm>
 
     <developers>
         <developer>
