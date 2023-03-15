@@ -144,6 +144,6 @@ steps:
 #      path: /drone/volume/mkdocs_cache/godfather_telegram/spring/ru
 ---
 kind: signature
-hmac: 4f741025c597d3ecfc001fba410c56863fb4481a911b289b3faec462136cdc38
+hmac: c42327421105822e775fa0a4a1ecaa4f17e276e2f9ef2c7922d28b4da7bb74b2
 
 ...
