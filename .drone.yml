@@ -27,77 +27,77 @@ steps:
       - echo "$MAVEN_SETTINGS" >> maven-settings.xml
       - mvn --settings maven-settings.xml -U -P snapshot clean deploy
 
-#---
-#kind: pipeline
-#type: docker
-#name: release-maven-central
-#
-#trigger:
-#  ref:
-#    - refs/tags/v.*.*.*
-#
-#volumes:
-#  - name: m2
-#    host:
-#      path: /drone/volume/m2
-#
-#steps:
-#
-#  - name: publish maven central
-#    image: maven:3.8.5-openjdk-17
-#    privileged: true
-#    volumes:
-#      - name: m2
-#        path: /root/.m2/repository
-#    environment:
-#      GPG_PRIVATE_KEY:
-#        from_secret: GPG_PRIVATE_KEY
-#      MAVEN_SETTINGS:
-#        from_secret: MAVEN_SETTINGS
-#      GPG_PASSPHRASE:
-#        from_secret: GPG_PASSPHRASE
-#    commands:
-#      - echo "$GPG_PRIVATE_KEY" >> gpg.key
-#      - echo "$MAVEN_SETTINGS" >> maven-settings.xml
-#      - gpg --pinentry-mode loopback --passphrase $GPG_PASSPHRASE --import gpg.key
-#      - mvn --settings maven-settings.xml -U -P ossrh,release clean deploy
-#
-#---
-#kind: pipeline
-#type: docker
-#name: release-struchkov-nexus
-#
-#trigger:
-#  ref:
-#    - refs/tags/v.*.*.*
-#
-#volumes:
-#  - name: m2
-#    host:
-#      path: /drone/volume/m2
-#
-#steps:
-#
-#  - name: publish struchkov nexus
-#    image: maven:3.8.5-openjdk-17
-#    privileged: true
-#    volumes:
-#      - name: m2
-#        path: /root/.m2/repository
-#    environment:
-#      GPG_PRIVATE_KEY:
-#        from_secret: GPG_PRIVATE_KEY
-#      MAVEN_SETTINGS:
-#        from_secret: MAVEN_SETTINGS
-#      GPG_PASSPHRASE:
-#        from_secret: GPG_PASSPHRASE
-#    commands:
-#      - echo "$GPG_PRIVATE_KEY" >> gpg.key
-#      - echo "$MAVEN_SETTINGS" >> maven-settings.xml
-#      - gpg --pinentry-mode loopback --passphrase $GPG_PASSPHRASE --import gpg.key
-#      - mvn --settings maven-settings.xml -U -P ossrh,release-struchkov-nexus clean deploy
-#
-#---
+---
+kind: pipeline
+type: docker
+name: release-maven-central
+
+trigger:
+  ref:
+    - refs/tags/v.*.*.*
+
+volumes:
+  - name: m2
+    host:
+      path: /drone/volume/m2
+
+steps:
+
+  - name: publish maven central
+    image: maven:3.8.5-openjdk-17
+    privileged: true
+    volumes:
+      - name: m2
+        path: /root/.m2/repository
+    environment:
+      GPG_PRIVATE_KEY:
+        from_secret: GPG_PRIVATE_KEY
+      MAVEN_SETTINGS:
+        from_secret: MAVEN_SETTINGS
+      GPG_PASSPHRASE:
+        from_secret: GPG_PASSPHRASE
+    commands:
+      - echo "$GPG_PRIVATE_KEY" >> gpg.key
+      - echo "$MAVEN_SETTINGS" >> maven-settings.xml
+      - gpg --pinentry-mode loopback --passphrase $GPG_PASSPHRASE --import gpg.key
+      - mvn --settings maven-settings.xml -U -P ossrh,release clean deploy
+
+---
+kind: pipeline
+type: docker
+name: release-struchkov-nexus
+
+trigger:
+  ref:
+    - refs/tags/v.*.*.*
+
+volumes:
+  - name: m2
+    host:
+      path: /drone/volume/m2
+
+steps:
+
+  - name: publish struchkov nexus
+    image: maven:3.8.5-openjdk-17
+    privileged: true
+    volumes:
+      - name: m2
+        path: /root/.m2/repository
+    environment:
+      GPG_PRIVATE_KEY:
+        from_secret: GPG_PRIVATE_KEY
+      MAVEN_SETTINGS:
+        from_secret: MAVEN_SETTINGS
+      GPG_PASSPHRASE:
+        from_secret: GPG_PASSPHRASE
+    commands:
+      - echo "$GPG_PRIVATE_KEY" >> gpg.key
+      - echo "$MAVEN_SETTINGS" >> maven-settings.xml
+      - gpg --pinentry-mode loopback --passphrase $GPG_PASSPHRASE --import gpg.key
+      - mvn --settings maven-settings.xml -U -P ossrh,release-struchkov-nexus clean deploy
+
+---
 #kind: pipeline
 #type: docker
 #name: create-develop-docs-site
@@ -145,6 +145,6 @@ steps:
 #      path: /drone/volume/mkdocs_cache/godfather_telegram/spring/ru
 ---
 kind: signature
-hmac: d636955a075dd69adbb353ae0870a969b1d35761a5b2061fc6743f279f275b31
+hmac: 5570f4b29d1eea10a076ebf0eebdbee38a46199aea3eadf76b82fc01d612fe80
 
 ...
