@@ -44,4 +44,12 @@ public class ChatGptLocalStorage implements ChatGptStorage {
         messageMap.remove(chatId);
     }
 
+    @Override
+    public long countMessagesByChatId(UUID chatId) {
+        if (messageMap.containsKey(chatId)) {
+            return messageMap.get(chatId).values().size();
+        }
+        return 0;
+    }
+
 }

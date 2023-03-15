@@ -75,4 +75,9 @@ public class ChatGptServiceImpl implements ChatGptService {
         chatStorage.remove(chatId);
     }
 
+    @Override
+    public long getCountMessages(@NonNull UUID chatId) {
+        return chatStorage.countMessagesByChatId(chatId);
+    }
+
 }

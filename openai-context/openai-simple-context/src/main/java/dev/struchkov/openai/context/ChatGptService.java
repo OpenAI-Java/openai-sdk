@@ -13,4 +13,6 @@ public interface ChatGptService {
 
     void closeChat(@NonNull UUID chatId);
 
+    long getCountMessages(@NonNull UUID chatId);
+
 }

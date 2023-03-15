@@ -16,4 +16,6 @@ public interface ChatGptStorage {
 
     void remove(UUID chatId);
 
+    long countMessagesByChatId(UUID chatId);
+
 }
