@@ -13,6 +13,7 @@
     <modules>
         <module>openai-simple-context</module>
         <module>openai-main-context</module>
+        <module>openai-quarkus-context</module>
     </modules>
 
     <properties>

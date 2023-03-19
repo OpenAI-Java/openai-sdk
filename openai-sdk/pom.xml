@@ -13,6 +13,7 @@
     <modules>
         <module>openai-main-sdk</module>
         <module>openai-simple-sdk</module>
+        <module>openai-quarkus-sdk</module>
     </modules>
 
     <properties>
