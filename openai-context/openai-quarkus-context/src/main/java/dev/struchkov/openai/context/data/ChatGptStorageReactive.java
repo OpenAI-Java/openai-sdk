@@ -7,7 +7,7 @@ import io.smallrye.mutiny.Uni;
 
 import java.util.UUID;
 
-public interface ChatGptStorage {
+public interface ChatGptStorageReactive {
 
     Uni<ChatInfo> save(ChatInfo build);
 

@@ -1,26 +1,28 @@
 package dev.struchkov.openai;
 
 import dev.struchkov.openai.context.ChatGptService;
-import dev.struchkov.openai.context.GPTClient;
-import dev.struchkov.openai.context.data.ChatGptStorage;
+import dev.struchkov.openai.context.data.ChatGptStorageReactive;
 import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
 import dev.struchkov.openai.domain.common.GptMessage;
 import dev.struchkov.openai.domain.model.gpt.GPT3Model;
 import dev.struchkov.openai.domain.request.GptRequest;
 import dev.struchkov.openai.domain.response.Choice;
+import dev.struchkov.openai.service.ChatGptClientService;
 import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.UUID;
 
+@ApplicationScoped
 @RequiredArgsConstructor
-public class ChatGptServiceImpl implements ChatGptService {
+public class ReactiveChatGptService implements ChatGptService {
 
-    private final GPTClient gptClient;
-    private final ChatGptStorage chatStorage;
+    private final ChatGptClientService clientService;
+    private final ChatGptStorageReactive chatStorage;
 
     @Override
     public Uni<ChatInfo> createChat() {
@@ -38,13 +40,13 @@ public class ChatGptServiceImpl implements ChatGptService {
         return chatStorage.save(chatMessage)
                 .onItem().transformToUni(
                         ignore -> chatStorage.findAllMessage(chatId)
-                                .map(ChatGptServiceImpl::convert)
+                                .map(ReactiveChatGptService::convert)
                                 .collect().asList()
                                 .map(gptMessages -> GptRequest.builder()
                                         .messages(gptMessages)
                                         .model(GPT3Model.GPT_3_5_TURBO)
                                         .build())
-                                .flatMap(gptClient::execute)
+                                .flatMap(clientService::getChatCompletion)
                                 .map(gptResponse -> {
                                     final List<Choice> choices = gptResponse.getChoices();
                                     return choices.get(choices.size() - 1).getMessage();

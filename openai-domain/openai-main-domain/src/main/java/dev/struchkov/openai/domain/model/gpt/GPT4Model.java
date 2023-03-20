@@ -1,15 +1,15 @@
 package dev.struchkov.openai.domain.model.gpt;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import dev.struchkov.openai.domain.model.AIModel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
-/**
- * @author upagge 14.03.2023
- */
-@Getter
 @RequiredArgsConstructor
 public enum GPT4Model implements GPTModel {
 
@@ -31,14 +31,28 @@ public enum GPT4Model implements GPTModel {
     /**
      * Snapshot of gpt-4-32 from March 14th 2023. Unlike gpt-4-32k, this model will not receive updates, and will only be supported for a three month period ending on June 14th 2023.
      */
-    GPT_4_32_K_0314("gpt-4-32k-0314");
+    GPT_4_32_K_0314("gpt-4-32k-0314"),
 
+    UNKNOWN("UNKNOWN");
+
+    @Getter
     private final String value;
 
-    public static Optional<GPT4Model> findByValue(String value) {
-        return Arrays.stream(values())
-                .filter(e -> e.getValue().equals(value))
-                .findFirst();
+    private static final List<AIModel> ENUM_LIST = new ArrayList<>();
+
+    static {
+        ENUM_LIST.addAll(EnumSet.allOf(GPT4Model.class));
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static GPT4Model findByValue(String value) {
+        return (GPT4Model) AIModel.fromValue(value, ENUM_LIST, UNKNOWN);
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+        return value;
     }
 
 }

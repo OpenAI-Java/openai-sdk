@@ -12,7 +12,6 @@ import dev.struchkov.openai.domain.model.gpt.GPT3Model;
 import dev.struchkov.openai.domain.model.gpt.GPT4Model;
 
 import java.lang.reflect.Type;
-import java.util.Optional;
 
 public class AIModelGsonSer implements JsonSerializer<AIModel>, JsonDeserializer<AIModel> {
 
@@ -24,14 +23,14 @@ public class AIModelGsonSer implements JsonSerializer<AIModel>, JsonDeserializer
     @Override
     public AIModel deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         try {
-            final Optional<GPT3Model> optGpt3 = GPT3Model.findByValue(json.getAsString());
-            if (optGpt3.isPresent()) {
-                return optGpt3.get();
+            final GPT3Model optGpt3 = GPT3Model.findByValue(json.getAsString());
+            if (!optGpt3.equals(GPT3Model.UNKNOWN)) {
+                return optGpt3;
             }
 
-            final Optional<GPT4Model> optGpt4 = GPT4Model.findByValue(json.getAsString());
-            if (optGpt4.isPresent()) {
-                return optGpt4.get();
+            final GPT4Model optGpt4 = GPT4Model.findByValue(json.getAsString());
+            if (!optGpt4.equals(GPT4Model.UNKNOWN)) {
+                return optGpt4;
             }
             throw new JsonParseException("Invalid value for enum MyEnum: " + json.getAsString());
         } catch (IllegalArgumentException e) {
