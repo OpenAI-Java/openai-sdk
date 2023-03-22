@@ -12,13 +12,20 @@ import dev.struchkov.openai.domain.response.Choice;
 import dev.struchkov.openai.domain.response.GptResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+import static dev.struchkov.haiti.utils.Checker.checkNotNull;
 
 @RequiredArgsConstructor
 public class ChatGptServiceImpl implements ChatGptService {
 
+    @Setter
+    private Long contextLimit;
     private final GPTClient gptClient;
     private final ChatGptStorage chatStorage;
 
@@ -29,18 +36,7 @@ public class ChatGptServiceImpl implements ChatGptService {
 
     @Override
     public String sendNewMessage(@NonNull UUID chatId, @NonNull String message) {
-        final ChatMessage chatMessage = ChatMessage.builder()
-                .chatId(chatId)
-                .role("user")
-                .message(message)
-                .build();
-        chatStorage.save(chatMessage);
-        final List<ChatMessage> historyMessages = chatStorage.findAllMessage(chatId);
-
-        final List<GptMessage> gptMessages = historyMessages.stream()
-                .map(ChatGptServiceImpl::convert)
-                .toList();
-
+        final List<GptMessage> gptMessages = generateGptMessages(chatId, message);
 
         final GptResponse gptResponse = gptClient.execute(
                 GptRequest.builder()
@@ -53,6 +49,47 @@ public class ChatGptServiceImpl implements ChatGptService {
         final GptMessage answer = choices.get(choices.size() - 1).getMessage();
         final ChatMessage answerMessage = convert(chatId, answer);
         return chatStorage.save(answerMessage).getMessage();
+    }
+
+    @Override
+    public CompletableFuture<String> sendNewMessageAsync(@NonNull UUID chatId, @NonNull String message) {
+        final List<GptMessage> gptMessages = generateGptMessages(chatId, message);
+
+        return gptClient.executeAsync(
+                GptRequest.builder()
+                        .messages(gptMessages)
+                        .model(GPT3Model.GPT_3_5_TURBO)
+                        .build()
+        ).thenApply(
+                gptResponse -> {
+                    final List<Choice> choices = gptResponse.getChoices();
+                    final GptMessage answer = choices.get(choices.size() - 1).getMessage();
+                    final ChatMessage answerMessage = convert(chatId, answer);
+                    return chatStorage.save(answerMessage).getMessage();
+                }
+        );
+    }
+
+    @NotNull
+    private List<GptMessage> generateGptMessages(@NotNull UUID chatId, @NotNull String message) {
+        final ChatMessage chatMessage = ChatMessage.builder()
+                .chatId(chatId)
+                .role("user")
+                .message(message)
+                .build();
+        chatStorage.save(chatMessage);
+        final List<ChatMessage> historyMessages = chatStorage.findAllMessage(chatId);
+
+        if (checkNotNull(contextLimit) && (historyMessages.size() > contextLimit)) {
+            final long delta = historyMessages.size() - contextLimit;
+            for (int i = 0; i < delta; i++) {
+                chatStorage.removeMessage(chatId, historyMessages.get(i).getMessageId());
+            }
+        }
+
+        return historyMessages.stream()
+                .map(ChatGptServiceImpl::convert)
+                .toList();
     }
 
     private ChatMessage convert(UUID chatId, GptMessage answer) {

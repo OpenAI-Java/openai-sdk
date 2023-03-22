@@ -13,6 +13,7 @@ import dev.struchkov.openai.domain.response.error.GptErrorDetail;
 import dev.struchkov.openai.domain.response.error.GptErrorResponse;
 import dev.struchkov.openai.exception.gpt.OpenAIGptApiException;
 import dev.struchkov.openai.util.AIModelGsonSer;
+import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
@@ -58,13 +59,13 @@ public class GPTClientImpl implements GPTClient {
     }
 
     @Override
-    public GptResponse execute(@NonNull GptRequest gptRequest) {
+    public Uni<GptResponse> execute(@NonNull GptRequest gptRequest) {
         try {
             final Request request = generateRequest(gptRequest);
             final Response response = okHttpClient.newCall(request).execute();
             final String responseJson = response.body().string();
             if (response.isSuccessful()) {
-                return gson.fromJson(responseJson, GptResponse.class);
+                return Uni.createFrom().item(gson.fromJson(responseJson, GptResponse.class));
             } else {
                 final GptErrorResponse errorResponse = gson.fromJson(responseJson, GptErrorResponse.class);
                 final GptErrorDetail errorDetail = errorResponse.getError();
