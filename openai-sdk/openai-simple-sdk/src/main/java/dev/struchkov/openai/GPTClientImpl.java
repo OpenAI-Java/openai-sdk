@@ -15,6 +15,8 @@ import dev.struchkov.openai.exception.gpt.OpenAIGptApiException;
 import dev.struchkov.openai.util.AIModelGsonSer;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 
 import static dev.struchkov.haiti.utils.Checker.checkNotBlank;
 
@@ -55,6 +58,38 @@ public class GPTClientImpl implements GPTClient {
                 .connectTimeout(timeout)
                 .readTimeout(timeout)
                 .build();
+    }
+
+    @Override
+    public CompletableFuture<GptResponse> executeAsync(@NonNull GptRequest gptRequest) {
+        final CompletableFuture<GptResponse> future = new CompletableFuture<>();
+        final Request request = generateRequest(gptRequest);
+        okHttpClient.newCall(request).enqueue(
+                new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        future.completeExceptionally(e);
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        final String responseJson = response.body().string();
+                        if (response.isSuccessful()) {
+                            future.complete(gson.fromJson(responseJson, GptResponse.class));
+                        } else {
+                            final GptErrorResponse errorResponse = gson.fromJson(responseJson, GptErrorResponse.class);
+                            final GptErrorDetail errorDetail = errorResponse.getError();
+                            future.completeExceptionally(new OpenAIGptApiException(
+                                    errorDetail.getMessage(),
+                                    errorDetail.getType(),
+                                    errorDetail.getParam(),
+                                    errorDetail.getCode()
+                            ));
+                        }
+                    }
+                }
+        );
+        return future;
     }
 
     @Override
