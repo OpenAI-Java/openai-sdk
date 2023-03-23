@@ -131,12 +131,12 @@
                 <version>${okhttp.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-            <dependency>
-                <groupId>com.google.code.gson</groupId>
-                <artifactId>gson</artifactId>
-                <version>${gson.version}</version>
-            </dependency>
+            <!--            &lt;!&ndash; https://mvnrepository.com/artifact/com.google.code.gson/gson &ndash;&gt;-->
+            <!--            <dependency>-->
+            <!--                <groupId>com.google.code.gson</groupId>-->
+            <!--                <artifactId>gson</artifactId>-->
+            <!--                <version>${gson.version}</version>-->
+            <!--            </dependency>-->
 
             <dependency>
                 <groupId>com.github.f4b6a3</groupId>

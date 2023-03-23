@@ -5,38 +5,51 @@ import dev.struchkov.openai.context.GPTClient;
 import dev.struchkov.openai.context.data.ChatGptStorage;
 import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
+import dev.struchkov.openai.domain.chat.CreateChat;
 import dev.struchkov.openai.domain.common.GptMessage;
+import dev.struchkov.openai.domain.message.AnswerChatMessage;
 import dev.struchkov.openai.domain.model.gpt.GPT3Model;
 import dev.struchkov.openai.domain.request.GptRequest;
 import dev.struchkov.openai.domain.response.Choice;
 import dev.struchkov.openai.domain.response.GptResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import static dev.struchkov.haiti.utils.Checker.checkNotBlank;
 import static dev.struchkov.haiti.utils.Checker.checkNotNull;
 
 @RequiredArgsConstructor
 public class ChatGptServiceImpl implements ChatGptService {
 
-    @Setter
-    private Long contextLimit;
     private final GPTClient gptClient;
     private final ChatGptStorage chatStorage;
 
     @Override
-    public ChatInfo createChat() {
-        return chatStorage.save(ChatInfo.builder().build());
+    public ChatInfo createChat(CreateChat createChat) {
+        return chatStorage.save(
+                ChatInfo.builder()
+                        .contextConstraint(createChat.getContextConstraint())
+                        .systemBehavior(createChat.getSystemBehavior())
+                        .build()
+        );
     }
 
     @Override
-    public String sendNewMessage(@NonNull UUID chatId, @NonNull String message) {
-        final List<GptMessage> gptMessages = generateGptMessages(chatId, message);
+    public AnswerChatMessage sendNewMessage(@NonNull UUID chatId, @NonNull String message) {
+        final ChatInfo chatInfo = chatStorage.findChatInfoById(chatId).orElseThrow();
+        final List<GptMessage> gptMessageHistory = generateGptMessages(chatInfo, message);
+
+        final List<GptMessage> gptMessages = new ArrayList<>(gptMessageHistory.size() + 1);
+        if (checkNotBlank(chatInfo.getSystemBehavior())) {
+            gptMessages.add(GptMessage.fromSystem(chatInfo.getSystemBehavior()));
+        }
+        gptMessages.addAll(gptMessageHistory);
 
         final GptResponse gptResponse = gptClient.execute(
                 GptRequest.builder()
@@ -48,12 +61,22 @@ public class ChatGptServiceImpl implements ChatGptService {
         final List<Choice> choices = gptResponse.getChoices();
         final GptMessage answer = choices.get(choices.size() - 1).getMessage();
         final ChatMessage answerMessage = convert(chatId, answer);
-        return chatStorage.save(answerMessage).getMessage();
+        return AnswerChatMessage.builder()
+                .message(chatStorage.save(answerMessage).getMessage())
+                .usage(gptResponse.getUsage())
+                .build();
     }
 
     @Override
-    public CompletableFuture<String> sendNewMessageAsync(@NonNull UUID chatId, @NonNull String message) {
-        final List<GptMessage> gptMessages = generateGptMessages(chatId, message);
+    public CompletableFuture<AnswerChatMessage> sendNewMessageAsync(@NonNull UUID chatId, @NonNull String message) {
+        final ChatInfo chatInfo = chatStorage.findChatInfoById(chatId).orElseThrow();
+        final List<GptMessage> gptMessageHistory = generateGptMessages(chatInfo, message);
+
+        final List<GptMessage> gptMessages = new ArrayList<>(gptMessageHistory.size() + 1);
+        if (checkNotBlank(chatInfo.getSystemBehavior())) {
+            gptMessages.add(GptMessage.fromSystem(chatInfo.getSystemBehavior()));
+        }
+        gptMessages.addAll(gptMessageHistory);
 
         return gptClient.executeAsync(
                 GptRequest.builder()
@@ -65,25 +88,28 @@ public class ChatGptServiceImpl implements ChatGptService {
                     final List<Choice> choices = gptResponse.getChoices();
                     final GptMessage answer = choices.get(choices.size() - 1).getMessage();
                     final ChatMessage answerMessage = convert(chatId, answer);
-                    return chatStorage.save(answerMessage).getMessage();
+                    return AnswerChatMessage.builder()
+                            .message(chatStorage.save(answerMessage).getMessage())
+                            .usage(gptResponse.getUsage())
+                            .build();
                 }
         );
     }
 
-    @NotNull
-    private List<GptMessage> generateGptMessages(@NotNull UUID chatId, @NotNull String message) {
+    private List<GptMessage> generateGptMessages(@NotNull ChatInfo chatInfo, @NotNull String message) {
         final ChatMessage chatMessage = ChatMessage.builder()
-                .chatId(chatId)
+                .chatId(chatInfo.getChatId())
                 .role("user")
                 .message(message)
                 .build();
         chatStorage.save(chatMessage);
-        final List<ChatMessage> historyMessages = chatStorage.findAllMessage(chatId);
+        final List<ChatMessage> historyMessages = chatStorage.findAllMessage(chatInfo.getChatId());
 
-        if (checkNotNull(contextLimit) && (historyMessages.size() > contextLimit)) {
-            final long delta = historyMessages.size() - contextLimit;
+        final Long contextConstraint = chatInfo.getContextConstraint();
+        if (checkNotNull(contextConstraint) && (historyMessages.size() > contextConstraint)) {
+            final long delta = historyMessages.size() - contextConstraint;
             for (int i = 0; i < delta; i++) {
-                chatStorage.removeMessage(chatId, historyMessages.get(i).getMessageId());
+                chatStorage.removeMessage(chatInfo.getChatId(), historyMessages.get(i).getMessageId());
             }
         }
 

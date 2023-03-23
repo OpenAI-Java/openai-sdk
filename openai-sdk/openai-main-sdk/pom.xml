@@ -24,6 +24,8 @@
             <groupId>dev.struchkov.haiti</groupId>
             <artifactId>haiti-utils</artifactId>
         </dependency>
+
+
     </dependencies>
 
 

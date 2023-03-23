@@ -10,17 +10,19 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+@Getter
 @RequiredArgsConstructor
 public enum GPT3Model implements GPTModel {
 
-    GPT_3_5_TURBO("gpt-3.5-turbo"),
-    GPT_3_5_TURBO_0301("gpt-3.5-turbo-0301"),
-    TEXT_DAVINCI_003("text-davinci-003"),
-    TEXT_DAVINCI_002("text-davinci-002"),
-    UNKNOWN("UNKNOWN");
+    GPT_3_5_TURBO("gpt-3.5-turbo", 0.000002),
+    GPT_3_5_TURBO_0301("gpt-3.5-turbo-0301", 0.000002),
+    TEXT_DAVINCI_003("text-davinci-003", 0.000002),
+    TEXT_DAVINCI_002("text-davinci-002", 0.000002),
+    UNKNOWN("UNKNOWN", 0.000002);
 
-    @Getter
+
     private final String value;
+    private final double price;
 
     private static final List<AIModel> ENUM_LIST = new ArrayList<>();
 

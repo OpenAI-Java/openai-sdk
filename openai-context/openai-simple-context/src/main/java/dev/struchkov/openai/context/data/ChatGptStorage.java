@@ -4,6 +4,7 @@ import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ChatGptStorage {
@@ -19,5 +20,7 @@ public interface ChatGptStorage {
     long countMessagesByChatId(UUID chatId);
 
     void removeMessage(UUID chatId, UUID messageId);
+
+    Optional<ChatInfo> findChatInfoById(UUID chatId);
 
 }

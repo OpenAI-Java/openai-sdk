@@ -55,4 +55,8 @@ public enum GPT4Model implements GPTModel {
         return value;
     }
 
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }

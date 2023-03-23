@@ -1,4 +1,4 @@
-package dev.struchkov.openai.domain.model;
+package dev.struchkov.openai.domain;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

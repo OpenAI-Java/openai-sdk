@@ -8,6 +8,7 @@ import dev.struchkov.openai.domain.chat.ChatMessage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.UUID;
 
@@ -57,6 +58,11 @@ public class ChatGptLocalStorage implements ChatGptStorage {
         if (messageMap.containsKey(chatId)) {
             messageMap.get(chatId).remove(messageId);
         }
+    }
+
+    @Override
+    public Optional<ChatInfo> findChatInfoById(UUID chatId) {
+        return Optional.ofNullable(chatMap.get(chatId));
     }
 
 }
