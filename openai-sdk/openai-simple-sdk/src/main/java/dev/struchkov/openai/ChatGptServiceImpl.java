@@ -6,6 +6,7 @@ import dev.struchkov.openai.context.data.ChatGptStorage;
 import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
 import dev.struchkov.openai.domain.chat.CreateChat;
+import dev.struchkov.openai.domain.chat.UpdateChat;
 import dev.struchkov.openai.domain.common.GptMessage;
 import dev.struchkov.openai.domain.message.AnswerChatMessage;
 import dev.struchkov.openai.domain.model.gpt.GPT3Model;
@@ -38,6 +39,14 @@ public class ChatGptServiceImpl implements ChatGptService {
                         .systemBehavior(createChat.getSystemBehavior())
                         .build()
         );
+    }
+
+    @Override
+    public ChatInfo updateChat(UpdateChat updateChat) {
+        final ChatInfo oldChatInfo = chatStorage.findChatInfoById(updateChat.getChatId()).orElseThrow();
+        oldChatInfo.setSystemBehavior(updateChat.getSystemBehavior());
+        oldChatInfo.setContextConstraint(updateChat.getContextConstraint());
+        return chatStorage.save(oldChatInfo);
     }
 
     @Override
