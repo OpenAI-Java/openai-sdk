@@ -31,9 +31,7 @@ public enum GPT4Model implements GPTModel {
     /**
      * Snapshot of gpt-4-32 from March 14th 2023. Unlike gpt-4-32k, this model will not receive updates, and will only be supported for a three month period ending on June 14th 2023.
      */
-    GPT_4_32_K_0314("gpt-4-32k-0314"),
-
-    UNKNOWN("UNKNOWN");
+    GPT_4_32_K_0314("gpt-4-32k-0314");
 
     @Getter
     private final String value;
@@ -46,7 +44,7 @@ public enum GPT4Model implements GPTModel {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static GPT4Model findByValue(String value) {
-        return (GPT4Model) AIModel.fromValue(value, ENUM_LIST, UNKNOWN);
+        return (GPT4Model) AIModel.fromValue(value, ENUM_LIST);
     }
 
     @Override
@@ -59,4 +57,5 @@ public enum GPT4Model implements GPTModel {
     public double getPrice() {
         return 0;
     }
+
 }

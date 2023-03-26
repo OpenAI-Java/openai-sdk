@@ -17,9 +17,7 @@ public enum GPT3Model implements GPTModel {
     GPT_3_5_TURBO("gpt-3.5-turbo", 0.000002),
     GPT_3_5_TURBO_0301("gpt-3.5-turbo-0301", 0.000002),
     TEXT_DAVINCI_003("text-davinci-003", 0.000002),
-    TEXT_DAVINCI_002("text-davinci-002", 0.000002),
-    UNKNOWN("UNKNOWN", 0.000002);
-
+    TEXT_DAVINCI_002("text-davinci-002", 0.000002);
 
     private final String value;
     private final double price;
@@ -32,7 +30,7 @@ public enum GPT3Model implements GPTModel {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static GPT3Model findByValue(String value) {
-        return (GPT3Model) AIModel.fromValue(value, ENUM_LIST, UNKNOWN);
+        return (GPT3Model) AIModel.fromValue(value, ENUM_LIST);
     }
 
     @Override

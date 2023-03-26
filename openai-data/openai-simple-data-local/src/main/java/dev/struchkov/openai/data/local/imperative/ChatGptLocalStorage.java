@@ -1,4 +1,4 @@
-package dev.struchkov.openai.data.local;
+package dev.struchkov.openai.data.local.imperative;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import dev.struchkov.openai.context.data.ChatGptStorage;
