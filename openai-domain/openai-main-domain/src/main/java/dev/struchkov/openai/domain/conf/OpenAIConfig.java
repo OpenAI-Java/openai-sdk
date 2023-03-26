@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class OpenAIConfig {
 
-    private String url = "https://api.openai.com/v1/chat/completions";
+    private String url = "https://api.openai.com";
     private String token;
     private String organisation;
     private AIModel aiModel;
