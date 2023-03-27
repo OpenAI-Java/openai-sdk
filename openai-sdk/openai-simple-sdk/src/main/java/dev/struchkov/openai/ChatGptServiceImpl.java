@@ -6,7 +6,6 @@ import dev.struchkov.openai.context.data.ChatGptStorage;
 import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
 import dev.struchkov.openai.domain.chat.CreateChat;
-import dev.struchkov.openai.domain.chat.UpdateChat;
 import dev.struchkov.openai.domain.common.GptMessage;
 import dev.struchkov.openai.domain.message.AnswerChatMessage;
 import dev.struchkov.openai.domain.model.gpt.GPT3Model;
@@ -42,7 +41,7 @@ public class ChatGptServiceImpl implements ChatGptService {
     }
 
     @Override
-    public ChatInfo updateChat(UpdateChat updateChat) {
+    public ChatInfo updateChat(ChatInfo updateChat) {
         final ChatInfo oldChatInfo = chatStorage.findChatInfoById(updateChat.getChatId()).orElseThrow();
         oldChatInfo.setSystemBehavior(updateChat.getSystemBehavior());
         oldChatInfo.setContextConstraint(updateChat.getContextConstraint());
@@ -105,6 +104,21 @@ public class ChatGptServiceImpl implements ChatGptService {
         );
     }
 
+    @Override
+    public void clearContext(@NonNull UUID chatId) {
+        chatStorage.removeAllMessages(chatId);
+    }
+
+    @Override
+    public void closeChat(@NonNull UUID chatId) {
+        chatStorage.remove(chatId);
+    }
+
+    @Override
+    public long getCountMessages(@NonNull UUID chatId) {
+        return chatStorage.countMessagesByChatId(chatId);
+    }
+
     private List<GptMessage> generateGptMessages(@NotNull ChatInfo chatInfo, @NotNull String message) {
         final ChatMessage chatMessage = ChatMessage.builder()
                 .chatId(chatInfo.getChatId())
@@ -140,16 +154,6 @@ public class ChatGptServiceImpl implements ChatGptService {
                 .role(mes.getRole())
                 .content(mes.getMessage())
                 .build();
-    }
-
-    @Override
-    public void closeChat(@NonNull UUID chatId) {
-        chatStorage.remove(chatId);
-    }
-
-    @Override
-    public long getCountMessages(@NonNull UUID chatId) {
-        return chatStorage.countMessagesByChatId(chatId);
     }
 
 }

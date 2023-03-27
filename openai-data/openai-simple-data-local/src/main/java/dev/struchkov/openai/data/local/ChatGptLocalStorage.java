@@ -71,4 +71,11 @@ public class ChatGptLocalStorage implements ChatGptStorage {
         return Optional.ofNullable(chatMap.get(chatId));
     }
 
+    @Override
+    public void removeAllMessages(UUID chatId) {
+        if (messageMap.containsKey(chatId)) {
+            messageMap.get(chatId).clear();
+        }
+    }
+
 }
