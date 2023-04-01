@@ -12,9 +12,13 @@ public interface ChatGptService {
 
     ChatInfo createChat(CreateChat createChat);
 
+    ChatInfo updateChat(ChatInfo updateChat);
+
     AnswerChatMessage sendNewMessage(@NonNull UUID chatId, @NonNull String message);
 
     CompletableFuture<AnswerChatMessage> sendNewMessageAsync(@NonNull UUID chatId, @NonNull String message);
+
+    void clearContext(@NonNull UUID chatId);
 
     void closeChat(@NonNull UUID chatId);
 

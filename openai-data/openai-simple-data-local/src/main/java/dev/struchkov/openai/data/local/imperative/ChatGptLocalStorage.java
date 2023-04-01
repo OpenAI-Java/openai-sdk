@@ -19,10 +19,16 @@ public class ChatGptLocalStorage implements ChatGptStorage {
 
     @Override
     public ChatInfo save(ChatInfo chatInfo) {
-        final UUID uuid = UuidCreator.getTimeOrderedEpochPlus1();
-        chatInfo.setChatId(uuid);
-        messageMap.put(uuid, new TreeMap<>());
-        chatMap.put(uuid, chatInfo);
+        final UUID uuid;
+        if (chatInfo.getChatId() == null) {
+            uuid = UuidCreator.getTimeOrderedEpochPlus1();
+            chatInfo.setChatId(uuid);
+            messageMap.put(uuid, new TreeMap<>());
+            chatMap.put(uuid, chatInfo);
+        } else {
+            uuid = chatInfo.getChatId();
+            chatMap.put(uuid, chatInfo);
+        }
         return chatInfo;
     }
 
@@ -63,6 +69,13 @@ public class ChatGptLocalStorage implements ChatGptStorage {
     @Override
     public Optional<ChatInfo> findChatInfoById(UUID chatId) {
         return Optional.ofNullable(chatMap.get(chatId));
+    }
+
+    @Override
+    public void removeAllMessages(UUID chatId) {
+        if (messageMap.containsKey(chatId)) {
+            messageMap.get(chatId).clear();
+        }
     }
 
 }

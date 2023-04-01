@@ -47,6 +47,12 @@ public class GPTClientImpl implements GPTClient {
                 .build();
     }
 
+    public GPTClientImpl(ObjectMapper mapper, OkHttpClient okHttpClient, GPTConfig gptConfig) {
+        this.mapper = mapper;
+        this.okHttpClient = okHttpClient;
+        this.gptConfig = gptConfig;
+    }
+
     @Override
     public CompletableFuture<GptResponse> executeAsync(@NonNull GptRequest gptRequest) {
         final CompletableFuture<GptResponse> future = new CompletableFuture<>();
@@ -109,7 +115,7 @@ public class GPTClientImpl implements GPTClient {
         final RequestBody body = RequestBody.create(MEDIA_TYPE_APPLICATION_JSON, mapper.writeValueAsString(gptRequest));
 
         final Request.Builder requestBuilder = new Request.Builder()
-                .url(gptConfig.getUrl())
+                .url(gptConfig.getUrl() + "/v1/chat/completions")
                 .header("Authorization", "Bearer " + gptConfig.getToken())
                 .post(body);
 

@@ -23,4 +23,6 @@ public interface ChatGptStorage {
 
     Optional<ChatInfo> findChatInfoById(UUID chatId);
 
+    void removeAllMessages(UUID chatId);
+
 }

@@ -4,21 +4,21 @@ import dev.struchkov.haiti.context.exception.BasicException;
 
 import java.text.MessageFormat;
 
-public abstract class OpenAIApiException extends BasicException {
+public class OpenAIApiException extends BasicException {
 
-    protected OpenAIApiException() {
+    public OpenAIApiException() {
         super(null);
     }
 
-    protected OpenAIApiException(String message) {
+    public OpenAIApiException(String message) {
         super(message);
     }
 
-    protected OpenAIApiException(String message, Object... args) {
+    public OpenAIApiException(String message, Object... args) {
         super(MessageFormat.format(message, args));
     }
 
-    protected OpenAIApiException(String message, Throwable cause) {
+    public OpenAIApiException(String message, Throwable cause) {
         super(message, cause);
     }
 

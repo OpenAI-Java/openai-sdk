@@ -41,6 +41,14 @@ public class ChatGptServiceImpl implements ChatGptService {
     }
 
     @Override
+    public ChatInfo updateChat(ChatInfo updateChat) {
+        final ChatInfo oldChatInfo = chatStorage.findChatInfoById(updateChat.getChatId()).orElseThrow();
+        oldChatInfo.setSystemBehavior(updateChat.getSystemBehavior());
+        oldChatInfo.setContextConstraint(updateChat.getContextConstraint());
+        return chatStorage.save(oldChatInfo);
+    }
+
+    @Override
     public AnswerChatMessage sendNewMessage(@NonNull UUID chatId, @NonNull String message) {
         final ChatInfo chatInfo = chatStorage.findChatInfoById(chatId).orElseThrow();
         final List<GptMessage> gptMessageHistory = generateGptMessages(chatInfo, message);
@@ -96,6 +104,21 @@ public class ChatGptServiceImpl implements ChatGptService {
         );
     }
 
+    @Override
+    public void clearContext(@NonNull UUID chatId) {
+        chatStorage.removeAllMessages(chatId);
+    }
+
+    @Override
+    public void closeChat(@NonNull UUID chatId) {
+        chatStorage.remove(chatId);
+    }
+
+    @Override
+    public long getCountMessages(@NonNull UUID chatId) {
+        return chatStorage.countMessagesByChatId(chatId);
+    }
+
     private List<GptMessage> generateGptMessages(@NotNull ChatInfo chatInfo, @NotNull String message) {
         final ChatMessage chatMessage = ChatMessage.builder()
                 .chatId(chatInfo.getChatId())
@@ -131,16 +154,6 @@ public class ChatGptServiceImpl implements ChatGptService {
                 .role(mes.getRole())
                 .content(mes.getMessage())
                 .build();
-    }
-
-    @Override
-    public void closeChat(@NonNull UUID chatId) {
-        chatStorage.remove(chatId);
-    }
-
-    @Override
-    public long getCountMessages(@NonNull UUID chatId) {
-        return chatStorage.countMessagesByChatId(chatId);
     }
 
 }
