@@ -144,11 +144,6 @@
                 <version>${uuid.creator.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>io.smallrye.reactive</groupId>
-                <artifactId>smallrye-mutiny-vertx-core</artifactId>
-                <version>${smallrye.mutiny.vertx.core.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

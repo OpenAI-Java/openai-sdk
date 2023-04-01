@@ -1,4 +1,4 @@
-package dev.struchkov.openai.context.data;
+package dev.struchkov.openai.quarkus.context.data;
 
 import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
@@ -7,7 +7,7 @@ import io.smallrye.mutiny.Uni;
 
 import java.util.UUID;
 
-public interface ChatGptStorageReactive {
+public interface ChatGptStorage {
 
     Uni<ChatInfo> save(ChatInfo build);
 

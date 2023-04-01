@@ -1,4 +1,4 @@
-package dev.struchkov.openai.domain;
+package dev.struchkov.openai.domain.deser;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -21,9 +21,9 @@ public class ModelDeserializer extends StdDeserializer<GPTModel> {
         final String value = ctx.readValue(p, String.class);
         return Stream.of(GPT3Model.values(), GPT4Model.values())
                 .flatMap(Stream::of)
-                .filter(model -> model.getValue().equalsIgnoreCase(value))
+                .filter(model -> model.getValue().equals(value))
                 .findAny()
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("Invalid value for enum: %s".formatted(value)));
     }
 
 }
