@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Singular;
 import lombok.ToString;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class GptRequest {
 
     private Double temperature;
 
+    @Singular
     private List<GptMessage> messages;
 
     @JsonProperty("top_p")

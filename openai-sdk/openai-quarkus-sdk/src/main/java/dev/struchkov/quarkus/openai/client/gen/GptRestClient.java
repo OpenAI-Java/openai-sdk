@@ -23,8 +23,8 @@ import javax.ws.rs.core.MediaType;
 @RegisterProvider(ExceptionMapper.class)
 @RegisterProvider(RequestInterceptor.class)
 @RegisterRestClient(baseUri = "https://api.openai.com")
-@ClientHeaderParam(name = "Authorization", value = "${auth.header}")
-@ClientHeaderParam(name = "OpenAI-Organization", value = "${org.header}", required = false)
+@ClientHeaderParam(name = "Authorization", value = "${openai.token}")
+@ClientHeaderParam(name = "OpenAI-Organization", value = "${openai.organisation}", required = false)
 public interface GptRestClient {
 
     @POST
