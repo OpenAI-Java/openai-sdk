@@ -11,5 +11,6 @@ public interface GPTClient {
     Uni<GptResponse> executeChat(@NonNull GptRequest gptRequest);
     Multi<GptResponse> executeChatStream(@NonNull GptRequest gptRequest);
     Uni<GptResponse> executePicture(@NonNull GptRequest gptRequest);
+//    Uni<GptResponse> executeVoiceToText(@NonNull MultiPartRequest gptRequest);
 
 }

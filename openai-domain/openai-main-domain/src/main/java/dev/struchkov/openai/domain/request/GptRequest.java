@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.struchkov.openai.domain.common.GptMessage;
 import dev.struchkov.openai.domain.model.gpt.GPTModel;
+import dev.struchkov.openai.domain.request.format.ResponseFormat;
 import dev.struchkov.openai.domain.request.picture.PictureSize;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Singular;
 import lombok.ToString;
 
 import java.util.List;
@@ -30,7 +30,6 @@ public class GptRequest {
 
     private Double temperature;
 
-    @Singular
     private List<GptMessage> messages;
 
     @JsonProperty("top_p")
@@ -58,6 +57,13 @@ public class GptRequest {
     private PictureSize size;
 
     @JsonProperty("response_format")
-    private String responseFormat;
+    private ResponseFormat responseFormat;
+//
+//    @RestForm
+//    @ToString.Exclude
+//    @PartType(MediaType.APPLICATION_OCTET_STREAM)
+//    private byte[] file;
+//
+//    private String language;
 
 }

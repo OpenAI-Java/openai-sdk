@@ -1,4 +1,4 @@
-package dev.struchkov.quarkus.openai.adapter;
+package dev.struchkov.quarkus.openai.client.adapter;
 
 import dev.struchkov.quarkus.openai.client.gen.GptRestClient;
 import dev.struchkov.openai.domain.request.GptRequest;
@@ -7,16 +7,13 @@ import dev.struchkov.openai.quarkus.context.GPTClient;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.Json;
+import lombok.Builder;
 import lombok.NonNull;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+@Builder
 public class ChatGptClientAdapter implements GPTClient {
 
     private final GptRestClient client;
-
-    public ChatGptClientAdapter(@RestClient GptRestClient client) {
-        this.client = client;
-    }
 
     @Override
     public Uni<GptResponse> executeChat(@NonNull GptRequest request) {
@@ -35,5 +32,10 @@ public class ChatGptClientAdapter implements GPTClient {
     public Uni<GptResponse> executePicture(@NonNull GptRequest request) {
         return client.getGeneratedImage(request);
     }
+
+//    @Override
+//    public Uni<GptResponse> executeVoiceToText(@NonNull GptRequest gptRequest) {
+//        return client.getTranscription(gptRequest);
+//    }
 
 }

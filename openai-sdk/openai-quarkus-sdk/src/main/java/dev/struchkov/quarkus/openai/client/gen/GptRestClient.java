@@ -19,7 +19,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/v1")
-@Consumes(MediaType.APPLICATION_JSON)
 @RegisterProvider(ExceptionMapper.class)
 @RegisterProvider(RequestInterceptor.class)
 @RegisterRestClient(baseUri = "https://api.openai.com")
@@ -29,18 +28,28 @@ public interface GptRestClient {
 
     @POST
     @Path("/chat/completions")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     Uni<GptResponse> getChatCompletion(GptRequest request);
 
     @POST
     @Path("/chat/completions")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(RestMediaType.APPLICATION_STREAM_JSON)
     @RestStreamElementType(MediaType.APPLICATION_JSON)
     Multi<String> getChatCompletionStream(GptRequest request);
 
     @POST
     @Path("/images/generations")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     Uni<GptResponse> getGeneratedImage(GptRequest request);
+
+//    @Blocking
+//    @POST
+//    @Path("/audio/transcriptions")
+////    @Consumes(MediaType.MULTIPART_FORM_DATA)
+////    @Produces(MediaType.APPLICATION_JSON)
+//    Uni<GptResponse> getTranscription(MultiPartRequest request);
 
 }
