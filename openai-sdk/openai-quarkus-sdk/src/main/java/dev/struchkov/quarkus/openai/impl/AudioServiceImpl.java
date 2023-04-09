@@ -1,15 +1,16 @@
 package dev.struchkov.quarkus.openai.impl;
 
 import dev.struchkov.openai.domain.request.audio.VoiceToTextRequest;
-import dev.struchkov.openai.domain.response.GptResponse;
+import dev.struchkov.openai.quarkus.context.GPTClient;
 import dev.struchkov.openai.quarkus.context.service.AudioGptService;
 import dev.struchkov.quarkus.openai.BaseGptService;
 import io.smallrye.mutiny.Uni;
-import lombok.experimental.SuperBuilder;
 
-@SuperBuilder
 public class AudioServiceImpl extends BaseGptService implements AudioGptService {
 
+    public AudioServiceImpl(GPTClient client) {
+        super(client);
+    }
 
     @Override
     public Uni<String> voiceToSpeech(VoiceToTextRequest request) {

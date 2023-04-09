@@ -1,31 +1,36 @@
 package dev.struchkov.quarkus.openai.impl;
 
-import dev.struchkov.openai.domain.chat.CreateChat;
-import dev.struchkov.openai.domain.message.AnswerChatMessage;
-import dev.struchkov.openai.quarkus.context.service.ChatGptService;
-import dev.struchkov.openai.quarkus.context.data.ChatGptStorage;
 import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
+import dev.struchkov.openai.domain.chat.CreateChat;
 import dev.struchkov.openai.domain.common.GptMessage;
+import dev.struchkov.openai.domain.message.AnswerChatMessage;
 import dev.struchkov.openai.domain.model.gpt.GPT3Model;
 import dev.struchkov.openai.domain.request.GptRequest;
 import dev.struchkov.openai.domain.response.Choice;
+import dev.struchkov.openai.quarkus.context.GPTClient;
+import dev.struchkov.openai.quarkus.context.data.ChatGptStorage;
+import dev.struchkov.openai.quarkus.context.service.ChatGptService;
 import dev.struchkov.quarkus.openai.BaseGptService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
-import lombok.experimental.SuperBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
 
+import static dev.struchkov.haiti.utils.Checker.checkNotBlank;
 import static dev.struchkov.haiti.utils.Checker.checkNotNull;
 
-@SuperBuilder
 public class ChatGptServiceImpl extends BaseGptService implements ChatGptService {
 
     private final ChatGptStorage chatStorage;
+
+    public ChatGptServiceImpl(GPTClient client, ChatGptStorage chatStorage) {
+        super(client);
+        this.chatStorage = chatStorage;
+    }
 
     @Override
     public Uni<ChatInfo> createChat(CreateChat createChat) {
@@ -41,7 +46,8 @@ public class ChatGptServiceImpl extends BaseGptService implements ChatGptService
                 .onItem().ifNull().fail()
                 .flatMap(chatInfo -> generateGptMessages(chatInfo, message)
                         .map(list -> {
-                            list.add(0, GptMessage.fromSystem(chatInfo.getSystemBehavior()));
+                            final String systemBehavior = chatInfo.getSystemBehavior();
+                            if (checkNotBlank(systemBehavior)) list.add(0, GptMessage.fromSystem(systemBehavior));
                             return GptRequest.builder()
                                     .messages(list)
                                     .model(GPT3Model.GPT_3_5_TURBO)

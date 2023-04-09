@@ -1,16 +1,16 @@
 package dev.struchkov.quarkus.openai.client.adapter;
 
-import dev.struchkov.quarkus.openai.client.gen.GptRestClient;
 import dev.struchkov.openai.domain.request.GptRequest;
 import dev.struchkov.openai.domain.response.GptResponse;
 import dev.struchkov.openai.quarkus.context.GPTClient;
+import dev.struchkov.quarkus.openai.client.gen.GptRestClient;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.Json;
-import lombok.Builder;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-@Builder
+@RequiredArgsConstructor
 public class ChatGptClientAdapter implements GPTClient {
 
     private final GptRestClient client;

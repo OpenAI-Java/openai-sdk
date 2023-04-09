@@ -1,19 +1,18 @@
 package dev.struchkov.openai.data.local.reactive;
 
 import com.github.f4b6a3.uuid.UuidCreator;
-import dev.struchkov.openai.quarkus.context.data.ChatGptStorage;
 import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
+import dev.struchkov.openai.quarkus.context.data.ChatGptStorage;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
-import lombok.Builder;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
-@Builder
+//TODO [09.04.2023|uPagge]: Перенести в свой модуль
 public class ChatGptLocalStorage implements ChatGptStorage {
 
     private final Map<UUID, ChatInfo> chatMap = new HashMap<>();
@@ -64,9 +63,9 @@ public class ChatGptLocalStorage implements ChatGptStorage {
 
     @Override
     public void removeMessage(UUID chatId, UUID messageId) {
-            if (messageMap.containsKey(chatId)) {
-                messageMap.get(chatId).remove(messageId);
-            }
+        if (messageMap.containsKey(chatId)) {
+            messageMap.get(chatId).remove(messageId);
+        }
     }
 
     @Override
