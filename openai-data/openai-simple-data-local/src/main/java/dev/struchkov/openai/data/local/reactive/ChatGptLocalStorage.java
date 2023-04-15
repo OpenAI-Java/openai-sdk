@@ -62,10 +62,11 @@ public class ChatGptLocalStorage implements ChatGptStorage {
     }
 
     @Override
-    public void removeMessage(UUID chatId, UUID messageId) {
+    public Uni<Void> removeMessage(UUID chatId, UUID messageId) {
         if (messageMap.containsKey(chatId)) {
             messageMap.get(chatId).remove(messageId);
         }
+        return Uni.createFrom().voidItem();
     }
 
     @Override

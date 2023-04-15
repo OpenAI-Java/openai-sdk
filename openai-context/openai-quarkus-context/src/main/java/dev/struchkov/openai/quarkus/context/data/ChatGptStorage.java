@@ -19,7 +19,7 @@ public interface ChatGptStorage {
 
     Uni<Long> countMessagesByChatId(UUID chatId);
 
-    void removeMessage(UUID chatId, UUID messageId);
+    Uni<Void> removeMessage(UUID chatId, UUID messageId);
 
     Uni<ChatInfo> findChatInfoById(UUID chatId);
 

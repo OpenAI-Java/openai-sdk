@@ -1,5 +1,6 @@
 package dev.struchkov.quarkus.openai.impl;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
 import dev.struchkov.openai.domain.chat.CreateChat;
@@ -34,10 +35,13 @@ public class ChatGptServiceImpl extends BaseGptService implements ChatGptService
 
     @Override
     public Uni<ChatInfo> createChat(CreateChat createChat) {
-        return chatStorage.save(ChatInfo.builder()
-                .contextConstraint(createChat.getContextConstraint())
-                .systemBehavior(createChat.getSystemBehavior())
-                .build());
+        return chatStorage.save(
+                ChatInfo.builder()
+                        .chatId(checkNotNull(createChat.getChatId()) ? createChat.getChatId() : UuidCreator.getTimeOrderedEpochPlus1())
+                        .contextConstraint(createChat.getContextConstraint())
+                        .systemBehavior(createChat.getSystemBehavior())
+                        .build()
+        );
     }
 
     @Override
