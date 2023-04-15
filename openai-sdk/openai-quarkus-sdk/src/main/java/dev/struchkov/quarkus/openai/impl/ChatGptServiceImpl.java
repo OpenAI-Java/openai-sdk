@@ -45,6 +45,11 @@ public class ChatGptServiceImpl extends BaseGptService implements ChatGptService
     }
 
     @Override
+    public Uni<ChatInfo> getChatById(@NonNull UUID chatId) {
+        return chatStorage.findChatInfoById(chatId);
+    }
+
+    @Override
     public Uni<AnswerChatMessage> sendNewMessage(@NonNull UUID chatId, @NonNull String message) {
         return chatStorage.findChatInfoById(chatId)
                 .onItem().ifNull().fail()

@@ -13,6 +13,8 @@ public interface ChatGptService {
 
     Uni<ChatInfo> createChat(CreateChat createChat);
 
+    Uni<ChatInfo> getChatById(@NonNull UUID chatId);
+
     Uni<AnswerChatMessage> sendNewMessage(@NonNull UUID chatId, @NonNull String message);
 
     Multi<String> sendNewMessageStream(@NonNull UUID chatId, @NonNull String message);
