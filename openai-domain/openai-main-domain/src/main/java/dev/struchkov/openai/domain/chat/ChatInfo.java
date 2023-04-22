@@ -6,12 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @Getter
 @Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatInfo {
@@ -23,6 +25,7 @@ public class ChatInfo {
      */
     private Long contextConstraint;
 
+    @ToString.Exclude
     private String systemBehavior;
 
 }
