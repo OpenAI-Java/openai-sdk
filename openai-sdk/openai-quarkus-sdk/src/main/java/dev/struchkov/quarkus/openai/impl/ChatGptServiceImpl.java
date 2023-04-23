@@ -18,6 +18,7 @@ import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -122,19 +123,28 @@ public class ChatGptServiceImpl extends BaseGptService implements ChatGptService
                 .message(message)
                 .build();
         return chatStorage.save(chatMessage)
-                .onItem().transformToMulti(ignore -> chatStorage.findAllMessage(chatInfo.getChatId()))
-                .collect().asList()
+                .onItem().transformToUni(ignore -> chatStorage.findAllMessage(chatInfo.getChatId()).collect().asList())
                 .flatMap(historyMessages -> {
                     final Long contextConstraint = chatInfo.getContextConstraint();
                     if (checkNotNull(contextConstraint) && (historyMessages.size() > contextConstraint)) {
                         final long delta = historyMessages.size() - contextConstraint;
+                        final List<Uni<Void>> removals = new ArrayList<>();
                         for (int i = 0; i < delta; i++) {
-                            chatStorage.removeMessage(chatInfo.getChatId(), historyMessages.get(i).getMessageId());
+                            removals.add(chatStorage.removeMessage(chatInfo.getChatId(), historyMessages.get(i).getMessageId()));
                         }
+                        return Uni.combine().all().unis(removals)
+                                .discardItems()
+                                .onItem().transformToUni(ignore -> {
+                                    final List<ChatMessage> messagesAfterRemoval = historyMessages.subList((int) delta, historyMessages.size());
+                                    return Multi.createFrom().iterable(messagesAfterRemoval)
+                                            .map(ChatGptServiceImpl::convert)
+                                            .collect().asList();
+                                });
+                    } else {
+                        return Multi.createFrom().iterable(historyMessages)
+                                .map(ChatGptServiceImpl::convert)
+                                .collect().asList();
                     }
-                    return chatStorage.findAllMessage(chatInfo.getChatId())
-                            .map(ChatGptServiceImpl::convert)
-                            .collect().asList();
                 });
     }
 
