@@ -7,7 +7,6 @@ import dev.struchkov.openai.quarkus.context.GPTClient;
 import dev.struchkov.openai.quarkus.context.service.ImageGptService;
 import dev.struchkov.quarkus.openai.BaseGptService;
 import io.smallrye.mutiny.Uni;
-import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 import java.util.Objects;

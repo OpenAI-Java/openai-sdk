@@ -2,13 +2,10 @@ package dev.struchkov.openai.domain.model.gpt;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import dev.struchkov.openai.domain.model.AIModel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
@@ -22,15 +19,11 @@ public enum GPT3Model implements GPTModel {
     private final String value;
     private final double price;
 
-    private static final List<AIModel> ENUM_LIST = new ArrayList<>();
-
-    static {
-        ENUM_LIST.addAll(EnumSet.allOf(GPT3Model.class));
-    }
-
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static GPT3Model findByValue(String value) {
-        return (GPT3Model) AIModel.fromValue(value, ENUM_LIST);
+        return Arrays.stream(values())
+                .filter(model -> model.getValue().equalsIgnoreCase(value))
+                .findFirst().orElse(null);
     }
 
     @Override
