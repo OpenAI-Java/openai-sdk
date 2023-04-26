@@ -9,7 +9,9 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.Json;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ChatGptClientAdapter implements GPTClient {
 
@@ -17,11 +19,14 @@ public class ChatGptClientAdapter implements GPTClient {
 
     @Override
     public Uni<GptResponse> executeChat(@NonNull GptRequest request) {
-        return client.getChatCompletion(request);
+        log.trace("Получен запрос к ChatGPT: {}", request);
+        return client.getChatCompletion(request)
+                .invoke(response -> log.trace("Получен ответ отChatGpt: {}", response));
     }
 
     @Override
     public Multi<GptResponse> executeChatStream(@NonNull GptRequest request) {
+        log.trace("Получен стрим запрос к ChatGPT: {}", request);
         return client.getChatCompletionStream(request)
                 .skip().first()
                 .skip().last(2)
@@ -30,6 +35,7 @@ public class ChatGptClientAdapter implements GPTClient {
 
     @Override
     public Uni<GptResponse> executePicture(@NonNull GptRequest request) {
+        log.trace("Получен запрос к DALL-E: {}", request);
         return client.getGeneratedImage(request);
     }
 

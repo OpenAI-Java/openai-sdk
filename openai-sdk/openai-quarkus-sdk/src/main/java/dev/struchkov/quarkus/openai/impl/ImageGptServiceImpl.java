@@ -5,19 +5,18 @@ import dev.struchkov.openai.domain.request.picture.PictureRequest;
 import dev.struchkov.openai.domain.response.PictureData;
 import dev.struchkov.openai.quarkus.context.GPTClient;
 import dev.struchkov.openai.quarkus.context.service.ImageGptService;
-import dev.struchkov.quarkus.openai.BaseGptService;
 import io.smallrye.mutiny.Uni;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Objects;
 
 import static dev.struchkov.openai.domain.request.format.impl.PictureResponseFormat.URL;
 
-public class ImageGptServiceImpl extends BaseGptService implements ImageGptService {
+@RequiredArgsConstructor
+public class ImageGptServiceImpl implements ImageGptService {
 
-    public ImageGptServiceImpl(GPTClient client) {
-        super(client);
-    }
+    protected final GPTClient client;
 
     @Override
     public Uni<List<String>> generateImage(PictureRequest request) {

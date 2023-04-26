@@ -12,10 +12,11 @@ import dev.struchkov.openai.domain.response.Choice;
 import dev.struchkov.openai.quarkus.context.GPTClient;
 import dev.struchkov.openai.quarkus.context.data.ChatGptStorage;
 import dev.struchkov.openai.quarkus.context.service.ChatGptService;
-import dev.struchkov.quarkus.openai.BaseGptService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -25,14 +26,12 @@ import java.util.UUID;
 import static dev.struchkov.haiti.utils.Checker.checkNotBlank;
 import static dev.struchkov.haiti.utils.Checker.checkNotNull;
 
-public class ChatGptServiceImpl extends BaseGptService implements ChatGptService {
+@Slf4j
+@RequiredArgsConstructor
+public class ChatGptServiceImpl implements ChatGptService {
 
+    protected final GPTClient client;
     private final ChatGptStorage chatStorage;
-
-    public ChatGptServiceImpl(GPTClient client, ChatGptStorage chatStorage) {
-        super(client);
-        this.chatStorage = chatStorage;
-    }
 
     @Override
     public Uni<ChatInfo> createChat(CreateChat createChat) {
@@ -42,12 +41,13 @@ public class ChatGptServiceImpl extends BaseGptService implements ChatGptService
                         .contextConstraint(createChat.getContextConstraint())
                         .systemBehavior(createChat.getSystemBehavior())
                         .build()
-        );
+        ).invoke(chatInfo -> log.debug("Был создан новый чат: {}", chatInfo));
     }
 
     @Override
     public Uni<ChatInfo> getChatById(@NonNull UUID chatId) {
-        return chatStorage.findChatInfoById(chatId);
+        return chatStorage.findChatInfoById(chatId)
+                .invoke(() -> log.trace("Получение чата по идентификатору: {}", chatId));
     }
 
     @Override
@@ -103,7 +103,8 @@ public class ChatGptServiceImpl extends BaseGptService implements ChatGptService
 
     @Override
     public Uni<Void> closeChat(@NonNull UUID chatId) {
-        return chatStorage.remove(chatId);
+        return chatStorage.remove(chatId)
+                .invoke(() -> log.debug("Чат был закрыт: {}", chatId));
     }
 
     @Override
@@ -113,7 +114,8 @@ public class ChatGptServiceImpl extends BaseGptService implements ChatGptService
 
     @Override
     public Uni<Void> clearContext(@NonNull UUID chatId) {
-        return chatStorage.removeAllMessages(chatId);
+        return chatStorage.removeAllMessages(chatId)
+                .invoke(() -> log.debug("Контекст чата очищен: {}", chatId));
     }
 
     private Uni<List<GptMessage>> generateGptMessages(@NotNull ChatInfo chatInfo, @NotNull String message) {
