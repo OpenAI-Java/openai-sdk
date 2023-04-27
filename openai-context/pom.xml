@@ -4,7 +4,7 @@
     <parent>
         <groupId>dev.struchkov.openai</groupId>
         <artifactId>openai-parent-sdk</artifactId>
-        <version>0.1.1</version>
+        <version>0.1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>openai-context</artifactId>
