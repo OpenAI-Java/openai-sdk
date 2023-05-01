@@ -13,7 +13,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class AnswerChatMessage {
+public class AnswerMessage {
 
     private String message;
     private Usage usage;

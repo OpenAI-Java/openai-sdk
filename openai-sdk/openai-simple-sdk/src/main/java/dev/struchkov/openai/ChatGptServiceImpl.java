@@ -7,7 +7,7 @@ import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
 import dev.struchkov.openai.domain.chat.CreateChat;
 import dev.struchkov.openai.domain.common.GptMessage;
-import dev.struchkov.openai.domain.message.AnswerChatMessage;
+import dev.struchkov.openai.domain.message.AnswerMessage;
 import dev.struchkov.openai.domain.model.gpt.GPT3Model;
 import dev.struchkov.openai.domain.request.GptRequest;
 import dev.struchkov.openai.domain.response.Choice;
@@ -49,7 +49,7 @@ public class ChatGptServiceImpl implements ChatGptService {
     }
 
     @Override
-    public AnswerChatMessage sendNewMessage(@NonNull UUID chatId, @NonNull String message) {
+    public AnswerMessage sendNewMessage(@NonNull UUID chatId, @NonNull String message) {
         final ChatInfo chatInfo = chatStorage.findChatInfoById(chatId).orElseThrow();
         final List<GptMessage> gptMessageHistory = generateGptMessages(chatInfo, message);
 
@@ -69,14 +69,14 @@ public class ChatGptServiceImpl implements ChatGptService {
         final List<Choice> choices = gptResponse.getChoices();
         final GptMessage answer = choices.get(choices.size() - 1).getMessage();
         final ChatMessage answerMessage = convert(chatId, answer);
-        return AnswerChatMessage.builder()
+        return AnswerMessage.builder()
                 .message(chatStorage.save(answerMessage).getMessage())
                 .usage(gptResponse.getUsage())
                 .build();
     }
 
     @Override
-    public CompletableFuture<AnswerChatMessage> sendNewMessageAsync(@NonNull UUID chatId, @NonNull String message) {
+    public CompletableFuture<AnswerMessage> sendNewMessageAsync(@NonNull UUID chatId, @NonNull String message) {
         final ChatInfo chatInfo = chatStorage.findChatInfoById(chatId).orElseThrow();
         final List<GptMessage> gptMessageHistory = generateGptMessages(chatInfo, message);
 
@@ -96,7 +96,7 @@ public class ChatGptServiceImpl implements ChatGptService {
                     final List<Choice> choices = gptResponse.getChoices();
                     final GptMessage answer = choices.get(choices.size() - 1).getMessage();
                     final ChatMessage answerMessage = convert(chatId, answer);
-                    return AnswerChatMessage.builder()
+                    return AnswerMessage.builder()
                             .message(chatStorage.save(answerMessage).getMessage())
                             .usage(gptResponse.getUsage())
                             .build();

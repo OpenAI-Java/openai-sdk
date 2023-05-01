@@ -2,7 +2,7 @@ package dev.struchkov.openai.context;
 
 import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.CreateChat;
-import dev.struchkov.openai.domain.message.AnswerChatMessage;
+import dev.struchkov.openai.domain.message.AnswerMessage;
 import lombok.NonNull;
 
 import java.util.UUID;
@@ -14,9 +14,9 @@ public interface ChatGptService {
 
     ChatInfo updateChat(ChatInfo updateChat);
 
-    AnswerChatMessage sendNewMessage(@NonNull UUID chatId, @NonNull String message);
+    AnswerMessage sendNewMessage(@NonNull UUID chatId, @NonNull String message);
 
-    CompletableFuture<AnswerChatMessage> sendNewMessageAsync(@NonNull UUID chatId, @NonNull String message);
+    CompletableFuture<AnswerMessage> sendNewMessageAsync(@NonNull UUID chatId, @NonNull String message);
 
     void clearContext(@NonNull UUID chatId);
 

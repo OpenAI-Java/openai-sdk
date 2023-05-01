@@ -10,8 +10,8 @@ public class RequestInterceptor implements ClientRequestFilter {
 
     @Override
     public void filter(ClientRequestContext requestContext){
-        log.info("Request entity: %s".formatted(requestContext.getEntity()));
-        log.info("Headers: %s".formatted(requestContext.getHeaders().entrySet()));
+        log.trace("Request entity: %s".formatted(requestContext.getEntity()));
+        log.trace("Headers: %s".formatted(requestContext.getHeaders().entrySet()));
     }
 
 }

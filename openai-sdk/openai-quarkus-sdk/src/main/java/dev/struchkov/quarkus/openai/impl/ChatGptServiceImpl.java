@@ -5,7 +5,7 @@ import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
 import dev.struchkov.openai.domain.chat.CreateChat;
 import dev.struchkov.openai.domain.common.GptMessage;
-import dev.struchkov.openai.domain.message.AnswerChatMessage;
+import dev.struchkov.openai.domain.message.AnswerMessage;
 import dev.struchkov.openai.domain.model.gpt.GPT3Model;
 import dev.struchkov.openai.domain.request.GptRequest;
 import dev.struchkov.openai.domain.response.Choice;
@@ -51,7 +51,7 @@ public class ChatGptServiceImpl implements ChatGptService {
     }
 
     @Override
-    public Uni<AnswerChatMessage> sendNewMessage(@NonNull UUID chatId, @NonNull String message) {
+    public Uni<AnswerMessage> sendNewMessage(@NonNull UUID chatId, @NonNull String message) {
         return chatStorage.findChatInfoById(chatId)
                 .onItem().ifNull().fail()
                 .flatMap(chatInfo -> generateGptMessages(chatInfo, message)
@@ -67,7 +67,7 @@ public class ChatGptServiceImpl implements ChatGptService {
                 .flatMap(gptResponse -> {
                     final List<Choice> choices = gptResponse.getChoices();
                     return chatStorage.save(convert(chatId, choices.get(choices.size() - 1).getMessage()))
-                            .map(chatMsg -> AnswerChatMessage.builder()
+                            .map(chatMsg -> AnswerMessage.builder()
                                     .message(chatMsg.getMessage())
                                     .usage(gptResponse.getUsage())
                                     .build());
@@ -116,6 +116,25 @@ public class ChatGptServiceImpl implements ChatGptService {
     public Uni<Void> clearContext(@NonNull UUID chatId) {
         return chatStorage.removeAllMessages(chatId)
                 .invoke(() -> log.debug("Контекст чата очищен: {}", chatId));
+    }
+
+    @Override
+    public Uni<AnswerMessage> sendSingleMessage(String message) {
+        return client.executeChat(
+                GptRequest.builder()
+                        .model(GPT3Model.GPT_3_5_TURBO)
+                        .messages(List.of(
+                                GptMessage.fromUser(message)
+                        ))
+                        .build()
+        ).map(gptResponse -> {
+            final List<Choice> choices = gptResponse.getChoices();
+            final GptMessage gptAnswer = choices.get(choices.size() - 1).getMessage();
+            return AnswerMessage.builder()
+                    .message(gptAnswer.getContent())
+                    .usage(gptResponse.getUsage())
+                    .build();
+        });
     }
 
     private Uni<List<GptMessage>> generateGptMessages(@NotNull ChatInfo chatInfo, @NotNull String message) {
