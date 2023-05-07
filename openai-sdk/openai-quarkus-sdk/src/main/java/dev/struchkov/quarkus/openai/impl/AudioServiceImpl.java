@@ -13,15 +13,15 @@ public class AudioServiceImpl implements AudioGptService {
 
     @Override
     public Uni<String> voiceToSpeech(VoiceToTextRequest request) {
-//        final GptRequest gptRequest = GptRequest.builder()
-//                .model(request.getModel())
+//        final MultipartGptRequest gptRequest = MultipartGptRequest.builder()
+//                .model(request.getModel().getValue())
 //                .file(request.getFile())
 //                .prompt(request.getPrompt())
-//                .responseFormat(request.getResponseFormat())
+//                .responseFormat(request.getResponseFormat().getValue())
 //                .temperature(request.getTemperature())
 //                .language(request.getLanguage())
 //                .build();
-//        return client.executeVoiceToText(gptReauest)
+//        return client.executeVoiceToText(gptRequest)
 //                .map(GptResponse::getText);
         return Uni.createFrom().failure(new RuntimeException("not implemented"));
     }

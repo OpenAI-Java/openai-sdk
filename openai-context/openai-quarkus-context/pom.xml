@@ -20,11 +20,6 @@
             <groupId>dev.struchkov.openai</groupId>
             <artifactId>openai-main-domain</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-mutiny</artifactId>
-            <version>2.16.4.Final</version>
-        </dependency>
 
     </dependencies>
 

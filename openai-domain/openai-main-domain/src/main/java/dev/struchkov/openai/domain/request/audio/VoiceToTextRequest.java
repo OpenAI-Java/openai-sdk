@@ -10,7 +10,7 @@ import lombok.Getter;
 @Builder
 public class VoiceToTextRequest {
 
-    private String file;
+    private byte[] file;
 
     private Whisper model;
 
