@@ -35,11 +35,14 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <quarkus.version>2.16.6.Final</quarkus.version>
         <haiti.version>2.7.2</haiti.version>
         <okhttp.version>4.10.0</okhttp.version>
         <gson.version>2.10.1</gson.version>
         <lombok.version>1.18.26</lombok.version>
         <uuid.creator.version>5.2.0</uuid.creator.version>
+
+        <jackson.version>2.15.0</jackson.version>
 
         <!-- https://mvnrepository.com/artifact/io.smallrye.reactive/smallrye-mutiny-vertx-core -->
         <smallrye.mutiny.vertx.core.version>2.30.1</smallrye.mutiny.vertx.core.version>
@@ -60,6 +63,32 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-rest-client-reactive-jackson</artifactId>
+                <version>${quarkus.version}</version>
+            </dependency>
+
+<!--             https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+<!--            https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations-->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+<!--            https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core-->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>dev.struchkov.openai</groupId>
                 <artifactId>openai-exception</artifactId>

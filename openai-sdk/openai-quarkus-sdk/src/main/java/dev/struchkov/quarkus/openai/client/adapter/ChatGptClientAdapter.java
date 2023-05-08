@@ -1,6 +1,7 @@
 package dev.struchkov.quarkus.openai.client.adapter;
 
 import dev.struchkov.openai.domain.request.GptRequest;
+import dev.struchkov.openai.domain.request.MultipartGptRequest;
 import dev.struchkov.openai.domain.response.GptResponse;
 import dev.struchkov.openai.quarkus.context.GPTClient;
 import dev.struchkov.quarkus.openai.client.gen.GptRestClient;
@@ -39,9 +40,21 @@ public class ChatGptClientAdapter implements GPTClient {
         return client.getGeneratedImage(request);
     }
 
+    @Override
+    public Uni<GptResponse> executePictureVariations(@NonNull MultipartGptRequest request) {
+        log.trace("Получен запрос к DALL-E: {}", request);
+        return client.getImageVariations(request);
+    }
+
+    @Override
+    public Uni<GptResponse> executePictureEdits(@NonNull MultipartGptRequest request) {
+        log.trace("Получен запрос к DALL-E: {}", request);
+        return client.getImageEdits(request);
+    }
+
 //    @Override
-//    public Uni<GptResponse> executeVoiceToText(@NonNull GptRequest gptRequest) {
-//        return client.getTranscription(gptRequest);
+//    public Uni<GptResponse> executeVoiceToText(@NonNull MultipartGptRequest request) {
+//        return client.getTranscription(request);
 //    }
 
 }

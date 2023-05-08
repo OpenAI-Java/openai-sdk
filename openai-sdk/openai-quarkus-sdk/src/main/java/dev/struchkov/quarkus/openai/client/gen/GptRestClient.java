@@ -1,5 +1,6 @@
 package dev.struchkov.quarkus.openai.client.gen;
 
+import dev.struchkov.openai.domain.request.MultipartGptRequest;
 import dev.struchkov.quarkus.openai.client.provider.ExceptionMapper;
 import dev.struchkov.quarkus.openai.client.provider.RequestInterceptor;
 import dev.struchkov.openai.domain.request.GptRequest;
@@ -23,7 +24,7 @@ import javax.ws.rs.core.MediaType;
 @RegisterProvider(RequestInterceptor.class)
 @RegisterRestClient(baseUri = "https://api.openai.com")
 @ClientHeaderParam(name = "Authorization", value = "${openai.token}")
-@ClientHeaderParam(name = "OpenAI-Organization", value = "${openai.organisation}", required = false)
+//@ClientHeaderParam(name = "OpenAI-Organization", value = "${openai.organisation}", required = false)
 public interface GptRestClient {
 
     @POST
@@ -45,11 +46,24 @@ public interface GptRestClient {
     @Produces(MediaType.APPLICATION_JSON)
     Uni<GptResponse> getGeneratedImage(GptRequest request);
 
-//    @Blocking
+    @POST
+    @Path("/images/variations")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<GptResponse> getImageVariations(MultipartGptRequest request);
+
+    @POST
+    @Path("/images/edits")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<GptResponse> getImageEdits(MultipartGptRequest request);
+
+    // вероятно проблема на стороне api, он не хавает форматы, которые подходят из списка и все равно пишет, что формат не тот
+    // https://community.openai.com/t/whisper-api-cannot-read-files-correctly/93420/37
 //    @POST
 //    @Path("/audio/transcriptions")
-////    @Consumes(MediaType.MULTIPART_FORM_DATA)
-////    @Produces(MediaType.APPLICATION_JSON)
-//    Uni<GptResponse> getTranscription(MultiPartRequest request);
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    Uni<GptResponse> getTranscription(MultipartGptRequest request);
 
 }

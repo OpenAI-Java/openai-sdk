@@ -58,12 +58,5 @@ public class GptRequest {
 
     @JsonProperty("response_format")
     private ResponseFormat responseFormat;
-//
-//    @RestForm
-//    @ToString.Exclude
-//    @PartType(MediaType.APPLICATION_OCTET_STREAM)
-//    private byte[] file;
-//
-//    private String language;
 
 }

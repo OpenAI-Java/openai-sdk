@@ -9,4 +9,8 @@ public interface ImageGptService {
 
     Uni<List<String>> generateImage(PictureRequest request);
 
+    Uni<List<String>> generateImageVariations(PictureRequest request);
+
+    Uni<List<String>> generateImageEdits(PictureRequest request);
+
 }
