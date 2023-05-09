@@ -4,7 +4,7 @@
     <parent>
         <groupId>dev.struchkov.openai</groupId>
         <artifactId>openai-domain</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>openai-simple-domain</artifactId>

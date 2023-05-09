@@ -4,7 +4,7 @@
 
     <groupId>dev.struchkov.openai</groupId>
     <artifactId>openai-parent-sdk</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>OpenAI SDK Java</name>
@@ -404,7 +404,7 @@
         <connection>scm:git:ssh://git@git.struchkov.dev:222/openai/openai-sdk.git</connection>
         <url>https://git.struchkov.dev/openai/openai-sdk</url>
         <developerConnection>scm:git:ssh://git@git.struchkov.dev:222/openai/openai-sdk.git</developerConnection>
-      <tag>v.0.3.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <developers>
