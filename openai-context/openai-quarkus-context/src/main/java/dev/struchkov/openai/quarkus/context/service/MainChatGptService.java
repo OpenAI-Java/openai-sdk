@@ -1,7 +1,7 @@
 package dev.struchkov.openai.quarkus.context.service;
 
-import dev.struchkov.openai.domain.chat.ChatInfo;
-import dev.struchkov.openai.domain.chat.CreateChat;
+import dev.struchkov.openai.domain.chat.CreateMainChat;
+import dev.struchkov.openai.domain.chat.MainChatInfo;
 import dev.struchkov.openai.domain.message.AnswerMessage;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -9,13 +9,13 @@ import lombok.NonNull;
 
 import java.util.UUID;
 
-public interface ChatGptService {
+public interface MainChatGptService<T extends MainChatInfo, D extends CreateMainChat> {
 
-    Uni<ChatInfo> createChat(CreateChat createChat);
+    Uni<T> createChat(D createChat);
 
-    Uni<ChatInfo> updateChat(ChatInfo updateChat);
+    Uni<T> updateChat(T updateChat);
 
-    Uni<ChatInfo> getChatById(@NonNull UUID chatId);
+    Uni<T> getChatById(@NonNull UUID chatId);
 
     Uni<AnswerMessage> sendNewMessage(@NonNull UUID chatId, @NonNull String message);
 

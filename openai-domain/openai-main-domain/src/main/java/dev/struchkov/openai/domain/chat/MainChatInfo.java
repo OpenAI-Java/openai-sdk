@@ -2,7 +2,6 @@ package dev.struchkov.openai.domain.chat;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,24 +11,23 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ChatInfo {
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+public class MainChatInfo {
 
-    private UUID chatId;
+    protected UUID chatId;
 
     /**
      * Ограничение контекста обсуждения. Задает сколько всего сообщений сохраняется в чате. Старые сообщения постепенно удаляются.
      */
-    private Long contextConstraint;
+    protected Long contextConstraint;
 
-    private Double temperature;
+    protected Double temperature;
 
-    private String userId;
+    protected String userId;
 
     @ToString.Exclude
-    private String systemBehavior;
+    protected String systemBehavior;
 
 }

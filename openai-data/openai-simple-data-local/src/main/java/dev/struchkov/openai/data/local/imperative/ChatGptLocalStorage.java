@@ -2,7 +2,7 @@ package dev.struchkov.openai.data.local.imperative;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import dev.struchkov.openai.context.data.ChatGptStorage;
-import dev.struchkov.openai.domain.chat.ChatInfo;
+import dev.struchkov.openai.domain.chat.MainChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
 
 import java.util.HashMap;
@@ -14,22 +14,22 @@ import java.util.UUID;
 
 public class ChatGptLocalStorage implements ChatGptStorage {
 
-    private final Map<UUID, ChatInfo> chatMap = new HashMap<>();
+    private final Map<UUID, MainChatInfo> chatMap = new HashMap<>();
     private final Map<UUID, TreeMap<UUID, ChatMessage>> messageMap = new HashMap<>();
 
     @Override
-    public ChatInfo save(ChatInfo chatInfo) {
+    public MainChatInfo save(MainChatInfo mainChatInfo) {
         final UUID uuid;
-        if (chatInfo.getChatId() == null) {
+        if (mainChatInfo.getChatId() == null) {
             uuid = UuidCreator.getTimeOrderedEpochPlus1();
-            chatInfo.setChatId(uuid);
+            mainChatInfo.setChatId(uuid);
             messageMap.put(uuid, new TreeMap<>());
-            chatMap.put(uuid, chatInfo);
+            chatMap.put(uuid, mainChatInfo);
         } else {
-            uuid = chatInfo.getChatId();
-            chatMap.put(uuid, chatInfo);
+            uuid = mainChatInfo.getChatId();
+            chatMap.put(uuid, mainChatInfo);
         }
-        return chatInfo;
+        return mainChatInfo;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ChatGptLocalStorage implements ChatGptStorage {
     }
 
     @Override
-    public Optional<ChatInfo> findChatInfoById(UUID chatId) {
+    public Optional<MainChatInfo> findChatInfoById(UUID chatId) {
         return Optional.ofNullable(chatMap.get(chatId));
     }
 

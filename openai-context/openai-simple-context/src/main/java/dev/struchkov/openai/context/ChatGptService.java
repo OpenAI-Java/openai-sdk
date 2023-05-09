@@ -1,7 +1,7 @@
 package dev.struchkov.openai.context;
 
-import dev.struchkov.openai.domain.chat.ChatInfo;
-import dev.struchkov.openai.domain.chat.CreateChat;
+import dev.struchkov.openai.domain.chat.MainChatInfo;
+import dev.struchkov.openai.domain.chat.CreateMainChat;
 import dev.struchkov.openai.domain.message.AnswerMessage;
 import lombok.NonNull;
 
@@ -10,9 +10,9 @@ import java.util.concurrent.CompletableFuture;
 
 public interface ChatGptService {
 
-    ChatInfo createChat(CreateChat createChat);
+    MainChatInfo createChat(CreateMainChat createChat);
 
-    ChatInfo updateChat(ChatInfo updateChat);
+    MainChatInfo updateChat(MainChatInfo updateChat);
 
     AnswerMessage sendNewMessage(@NonNull UUID chatId, @NonNull String message);
 

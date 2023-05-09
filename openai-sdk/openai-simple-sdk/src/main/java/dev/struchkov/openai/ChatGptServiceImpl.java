@@ -3,9 +3,9 @@ package dev.struchkov.openai;
 import dev.struchkov.openai.context.ChatGptService;
 import dev.struchkov.openai.context.GPTClient;
 import dev.struchkov.openai.context.data.ChatGptStorage;
-import dev.struchkov.openai.domain.chat.ChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
-import dev.struchkov.openai.domain.chat.CreateChat;
+import dev.struchkov.openai.domain.chat.CreateMainChat;
+import dev.struchkov.openai.domain.chat.MainChatInfo;
 import dev.struchkov.openai.domain.common.GptMessage;
 import dev.struchkov.openai.domain.message.AnswerMessage;
 import dev.struchkov.openai.domain.model.gpt.GPT3Model;
@@ -31,32 +31,32 @@ public class ChatGptServiceImpl implements ChatGptService {
     private final ChatGptStorage chatStorage;
 
     @Override
-    public ChatInfo createChat(CreateChat createChat) {
-        return chatStorage.save(
-                ChatInfo.builder()
-                        .contextConstraint(createChat.getContextConstraint())
-                        .systemBehavior(createChat.getSystemBehavior())
-                        .build()
-        );
+    public MainChatInfo createChat(CreateMainChat createChat) {
+        final MainChatInfo mainChatInfo = new MainChatInfo();
+        mainChatInfo.setContextConstraint(createChat.getContextConstraint());
+        mainChatInfo.setSystemBehavior(createChat.getSystemBehavior());
+        mainChatInfo.setChatId(createChat.getChatId());
+        mainChatInfo.setTemperature(createChat.getTemperature());
+        return chatStorage.save(mainChatInfo);
     }
 
     @Override
-    public ChatInfo updateChat(ChatInfo updateChat) {
-        final ChatInfo oldChatInfo = chatStorage.findChatInfoById(updateChat.getChatId()).orElseThrow();
-        oldChatInfo.setSystemBehavior(updateChat.getSystemBehavior());
-        oldChatInfo.setContextConstraint(updateChat.getContextConstraint());
-        oldChatInfo.setTemperature(updateChat.getTemperature());
-        return chatStorage.save(oldChatInfo);
+    public MainChatInfo updateChat(MainChatInfo updateChat) {
+        final MainChatInfo oldMainChatInfo = chatStorage.findChatInfoById(updateChat.getChatId()).orElseThrow();
+        oldMainChatInfo.setSystemBehavior(updateChat.getSystemBehavior());
+        oldMainChatInfo.setContextConstraint(updateChat.getContextConstraint());
+        oldMainChatInfo.setTemperature(updateChat.getTemperature());
+        return chatStorage.save(oldMainChatInfo);
     }
 
     @Override
     public AnswerMessage sendNewMessage(@NonNull UUID chatId, @NonNull String message) {
-        final ChatInfo chatInfo = chatStorage.findChatInfoById(chatId).orElseThrow();
-        final List<GptMessage> gptMessageHistory = generateGptMessages(chatInfo, message);
+        final MainChatInfo mainChatInfo = chatStorage.findChatInfoById(chatId).orElseThrow();
+        final List<GptMessage> gptMessageHistory = generateGptMessages(mainChatInfo, message);
 
         final List<GptMessage> gptMessages = new ArrayList<>(gptMessageHistory.size() + 1);
-        if (checkNotBlank(chatInfo.getSystemBehavior())) {
-            gptMessages.add(GptMessage.fromSystem(chatInfo.getSystemBehavior()));
+        if (checkNotBlank(mainChatInfo.getSystemBehavior())) {
+            gptMessages.add(GptMessage.fromSystem(mainChatInfo.getSystemBehavior()));
         }
         gptMessages.addAll(gptMessageHistory);
 
@@ -81,12 +81,12 @@ public class ChatGptServiceImpl implements ChatGptService {
 
     @Override
     public CompletableFuture<AnswerMessage> sendNewMessageAsync(@NonNull UUID chatId, @NonNull String message) {
-        final ChatInfo chatInfo = chatStorage.findChatInfoById(chatId).orElseThrow();
-        final List<GptMessage> gptMessageHistory = generateGptMessages(chatInfo, message);
+        final MainChatInfo mainChatInfo = chatStorage.findChatInfoById(chatId).orElseThrow();
+        final List<GptMessage> gptMessageHistory = generateGptMessages(mainChatInfo, message);
 
         final List<GptMessage> gptMessages = new ArrayList<>(gptMessageHistory.size() + 1);
-        if (checkNotBlank(chatInfo.getSystemBehavior())) {
-            gptMessages.add(GptMessage.fromSystem(chatInfo.getSystemBehavior()));
+        if (checkNotBlank(mainChatInfo.getSystemBehavior())) {
+            gptMessages.add(GptMessage.fromSystem(mainChatInfo.getSystemBehavior()));
         }
         gptMessages.addAll(gptMessageHistory);
 
@@ -126,20 +126,20 @@ public class ChatGptServiceImpl implements ChatGptService {
         return chatStorage.countMessagesByChatId(chatId);
     }
 
-    private List<GptMessage> generateGptMessages(@NotNull ChatInfo chatInfo, @NotNull String message) {
+    private List<GptMessage> generateGptMessages(@NotNull MainChatInfo mainChatInfo, @NotNull String message) {
         final ChatMessage chatMessage = ChatMessage.builder()
-                .chatId(chatInfo.getChatId())
+                .chatId(mainChatInfo.getChatId())
                 .role("user")
                 .message(message)
                 .build();
         chatStorage.save(chatMessage);
-        final List<ChatMessage> historyMessages = chatStorage.findAllMessage(chatInfo.getChatId());
+        final List<ChatMessage> historyMessages = chatStorage.findAllMessage(mainChatInfo.getChatId());
 
-        final Long contextConstraint = chatInfo.getContextConstraint();
+        final Long contextConstraint = mainChatInfo.getContextConstraint();
         if (checkNotNull(contextConstraint) && (historyMessages.size() > contextConstraint)) {
             final long delta = historyMessages.size() - contextConstraint;
             for (int i = 0; i < delta; i++) {
-                chatStorage.removeMessage(chatInfo.getChatId(), historyMessages.get(i).getMessageId());
+                chatStorage.removeMessage(mainChatInfo.getChatId(), historyMessages.get(i).getMessageId());
             }
         }
 

@@ -1,9 +1,9 @@
 package dev.struchkov.openai.data.local.reactive;
 
 import com.github.f4b6a3.uuid.UuidCreator;
-import dev.struchkov.openai.domain.chat.ChatInfo;
+import dev.struchkov.openai.domain.chat.MainChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
-import dev.struchkov.openai.quarkus.context.data.ChatGptStorage;
+import dev.struchkov.openai.quarkus.context.data.MainChatGptStorage;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 
@@ -14,19 +14,19 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 //TODO [09.04.2023|uPagge]: Перенести в свой модуль
-public class ChatGptLocalStorage implements ChatGptStorage {
+public class ChatGptLocalStorage implements MainChatGptStorage {
 
-    private final Map<UUID, ChatInfo> chatMap = new HashMap<>();
+    private final Map<UUID, MainChatInfo> chatMap = new HashMap<>();
     private final Map<UUID, TreeMap<UUID, ChatMessage>> messageMap = new HashMap<>();
 
     @Override
-    public Uni<ChatInfo> save(ChatInfo chatInfo) {
+    public Uni<MainChatInfo> save(MainChatInfo mainChatInfo) {
         return Uni.createFrom().item(() -> {
             final UUID uuid = UuidCreator.getTimeOrderedEpochPlus1();
-            chatInfo.setChatId(uuid);
+            mainChatInfo.setChatId(uuid);
             messageMap.put(uuid, new TreeMap<>());
-            chatMap.put(uuid, chatInfo);
-            return chatInfo;
+            chatMap.put(uuid, mainChatInfo);
+            return mainChatInfo;
         });
     }
 
@@ -76,7 +76,7 @@ public class ChatGptLocalStorage implements ChatGptStorage {
     }
 
     @Override
-    public Uni<ChatInfo> findChatInfoById(UUID chatId) {
+    public Uni<MainChatInfo> findChatInfoById(UUID chatId) {
         return Uni.createFrom().item(() -> chatMap.get(chatId));
     }
 

@@ -1,6 +1,6 @@
 package dev.struchkov.openai.quarkus.context.data;
 
-import dev.struchkov.openai.domain.chat.ChatInfo;
+import dev.struchkov.openai.domain.chat.MainChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -8,9 +8,9 @@ import io.smallrye.mutiny.Uni;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public interface ChatGptStorage {
+public interface MainChatGptStorage<T extends MainChatInfo> {
 
-    Uni<ChatInfo> save(ChatInfo build);
+    Uni<T> save(T chatInfo);
 
     Uni<ChatMessage> save(ChatMessage chatMessage);
 
@@ -24,7 +24,7 @@ public interface ChatGptStorage {
 
     Uni<Void> removeMessage(UUID chatId, UUID messageId);
 
-    Uni<ChatInfo> findChatInfoById(UUID chatId);
+    Uni<T> findChatInfoById(UUID chatId);
 
     Uni<Void> removeAllMessages(UUID chatId);
 

@@ -1,9 +1,8 @@
-package dev.struchkov.quarkus.openai.impl;
+package dev.struchkov.quarkus.openai.impl.chatgpt;
 
-import com.github.f4b6a3.uuid.UuidCreator;
-import dev.struchkov.openai.domain.chat.ChatInfo;
+import dev.struchkov.openai.domain.chat.CreateMainChat;
+import dev.struchkov.openai.domain.chat.MainChatInfo;
 import dev.struchkov.openai.domain.chat.ChatMessage;
-import dev.struchkov.openai.domain.chat.CreateChat;
 import dev.struchkov.openai.domain.common.GptMessage;
 import dev.struchkov.openai.domain.message.AnswerMessage;
 import dev.struchkov.openai.domain.model.gpt.GPT3Model;
@@ -11,8 +10,8 @@ import dev.struchkov.openai.domain.request.GptRequest;
 import dev.struchkov.openai.domain.response.Choice;
 import dev.struchkov.openai.domain.response.GptResponse;
 import dev.struchkov.openai.quarkus.context.GPTClient;
-import dev.struchkov.openai.quarkus.context.data.ChatGptStorage;
-import dev.struchkov.openai.quarkus.context.service.ChatGptService;
+import dev.struchkov.openai.quarkus.context.data.MainChatGptStorage;
+import dev.struchkov.openai.quarkus.context.service.MainChatGptService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
@@ -30,37 +29,13 @@ import static dev.struchkov.haiti.utils.Checker.checkNotNull;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ChatGptServiceImpl implements ChatGptService {
+public abstract class AbstractChatGptService<T extends MainChatInfo, D extends CreateMainChat> implements MainChatGptService<T, D> {
 
     protected final GPTClient client;
-    private final ChatGptStorage chatStorage;
+    protected final MainChatGptStorage<T> chatStorage;
 
     @Override
-    public Uni<ChatInfo> createChat(CreateChat createChat) {
-        return chatStorage.save(
-                ChatInfo.builder()
-                        .chatId(checkNotNull(createChat.getChatId()) ? createChat.getChatId() : UuidCreator.getTimeOrderedEpochPlus1())
-                        .temperature(checkNotNull(createChat.getTemperature()) ? createChat.getTemperature() : 1.0)
-                        .userId(createChat.getUserId())
-                        .contextConstraint(createChat.getContextConstraint())
-                        .systemBehavior(createChat.getSystemBehavior())
-                        .build()
-        ).invoke(chatInfo -> log.debug("Был создан новый чат: {}", chatInfo));
-    }
-
-    @Override
-    public Uni<ChatInfo> updateChat(ChatInfo updateChat) {
-        return chatStorage.findChatInfoById(updateChat.getChatId())
-                .flatMap(existChatInfo -> {
-                    existChatInfo.setSystemBehavior(updateChat.getSystemBehavior());
-                    existChatInfo.setContextConstraint(updateChat.getContextConstraint());
-                    existChatInfo.setTemperature(updateChat.getTemperature());
-                    return chatStorage.save(existChatInfo);
-                });
-    }
-
-    @Override
-    public Uni<ChatInfo> getChatById(@NonNull UUID chatId) {
+    public Uni<T> getChatById(@NonNull UUID chatId) {
         return chatStorage.findChatInfoById(chatId)
                 .invoke(() -> log.trace("Получение чата по идентификатору: {}", chatId));
     }
@@ -153,24 +128,24 @@ public class ChatGptServiceImpl implements ChatGptService {
         });
     }
 
-    private Uni<ChatMessage> createNewUserChatMessage(@NotNull String message, ChatInfo chatInfo) {
+    private Uni<ChatMessage> createNewUserChatMessage(@NotNull String message, MainChatInfo mainChatInfo) {
         return chatStorage.save(
                 ChatMessage.builder()
                         .dateAdded(LocalDateTime.now())
-                        .chatId(chatInfo.getChatId())
+                        .chatId(mainChatInfo.getChatId())
                         .role("user")
                         .message(message)
                         .build()
         );
     }
 
-    private Uni<GptRequest> generateGptRequest(ChatInfo chatInfo, boolean stream) {
-        return generateGptMessages(chatInfo)
+    private Uni<GptRequest> generateGptRequest(MainChatInfo mainChatInfo, boolean stream) {
+        return generateGptMessages(mainChatInfo)
                 .map(
                         gptMessages -> GptRequest.builder()
                                 .messages(gptMessages)
-                                .temperature(chatInfo.getTemperature())
-                                .user(chatInfo.getUserId())
+                                .temperature(mainChatInfo.getTemperature())
+                                .user(mainChatInfo.getUserId())
                                 .model(GPT3Model.GPT_3_5_TURBO)
                                 .stream(stream)
                                 .build()
@@ -190,32 +165,32 @@ public class ChatGptServiceImpl implements ChatGptService {
                 );
     }
 
-    private Uni<List<GptMessage>> generateGptMessages(@NotNull ChatInfo chatInfo) {
-        return chatStorage.findAllMessage(chatInfo.getChatId()).collect().asList()
+    private Uni<List<GptMessage>> generateGptMessages(@NotNull MainChatInfo mainChatInfo) {
+        return chatStorage.findAllMessage(mainChatInfo.getChatId()).collect().asList()
                 .flatMap(historyMessages -> {
-                    final Long contextConstraint = chatInfo.getContextConstraint();
+                    final Long contextConstraint = mainChatInfo.getContextConstraint();
                     if (checkNotNull(contextConstraint) && (historyMessages.size() > contextConstraint)) {
                         final long delta = historyMessages.size() - contextConstraint;
                         final List<Uni<Void>> removals = new ArrayList<>();
                         for (int i = 0; i < delta; i++) {
-                            removals.add(chatStorage.removeMessage(chatInfo.getChatId(), historyMessages.get(i).getMessageId()));
+                            removals.add(chatStorage.removeMessage(mainChatInfo.getChatId(), historyMessages.get(i).getMessageId()));
                         }
                         return Uni.combine().all().unis(removals)
                                 .discardItems()
                                 .onItem().transformToUni(ignore -> {
                                     final List<ChatMessage> messagesAfterRemoval = historyMessages.subList((int) delta, historyMessages.size());
                                     return Multi.createFrom().iterable(messagesAfterRemoval)
-                                            .map(ChatGptServiceImpl::convert)
+                                            .map(AbstractChatGptService::convert)
                                             .collect().asList();
                                 });
                     } else {
                         return Multi.createFrom().iterable(historyMessages)
-                                .map(ChatGptServiceImpl::convert)
+                                .map(AbstractChatGptService::convert)
                                 .collect().asList();
                     }
                 }).invoke(gptMessages -> {
-                    if (checkNotBlank(chatInfo.getSystemBehavior())) {
-                        gptMessages.add(0, GptMessage.fromSystem(chatInfo.getSystemBehavior()));
+                    if (checkNotBlank(mainChatInfo.getSystemBehavior())) {
+                        gptMessages.add(0, GptMessage.fromSystem(mainChatInfo.getSystemBehavior()));
                     }
                 });
     }
