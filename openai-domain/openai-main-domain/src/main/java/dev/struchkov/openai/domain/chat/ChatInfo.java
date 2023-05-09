@@ -25,6 +25,10 @@ public class ChatInfo {
      */
     private Long contextConstraint;
 
+    private Double temperature;
+
+    private String userId;
+
     @ToString.Exclude
     private String systemBehavior;
 

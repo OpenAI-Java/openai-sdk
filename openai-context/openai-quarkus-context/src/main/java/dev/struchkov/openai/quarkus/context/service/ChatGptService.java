@@ -13,11 +13,17 @@ public interface ChatGptService {
 
     Uni<ChatInfo> createChat(CreateChat createChat);
 
+    Uni<ChatInfo> updateChat(ChatInfo updateChat);
+
     Uni<ChatInfo> getChatById(@NonNull UUID chatId);
 
     Uni<AnswerMessage> sendNewMessage(@NonNull UUID chatId, @NonNull String message);
 
     Multi<String> sendNewMessageStream(@NonNull UUID chatId, @NonNull String message);
+
+    Uni<AnswerMessage> regenerateMessage(@NonNull UUID chatId, @NonNull UUID messageId);
+
+    Uni<AnswerMessage> continueThought(@NonNull UUID chatId);
 
     Uni<Void> closeChat(@NonNull UUID chatId);
 

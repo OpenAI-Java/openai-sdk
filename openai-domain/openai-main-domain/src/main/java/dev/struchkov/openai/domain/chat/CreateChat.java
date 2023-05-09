@@ -26,6 +26,10 @@ public class CreateChat {
      */
     private Long contextConstraint;
 
+    private Double temperature;
+
+    private String userId;
+
     private String systemBehavior;
 
 }

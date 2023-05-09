@@ -45,6 +45,7 @@ public class ChatGptServiceImpl implements ChatGptService {
         final ChatInfo oldChatInfo = chatStorage.findChatInfoById(updateChat.getChatId()).orElseThrow();
         oldChatInfo.setSystemBehavior(updateChat.getSystemBehavior());
         oldChatInfo.setContextConstraint(updateChat.getContextConstraint());
+        oldChatInfo.setTemperature(updateChat.getTemperature());
         return chatStorage.save(oldChatInfo);
     }
 
@@ -69,8 +70,11 @@ public class ChatGptServiceImpl implements ChatGptService {
         final List<Choice> choices = gptResponse.getChoices();
         final GptMessage answer = choices.get(choices.size() - 1).getMessage();
         final ChatMessage answerMessage = convert(chatId, answer);
+        final ChatMessage savedAnswer = chatStorage.save(answerMessage);
         return AnswerMessage.builder()
-                .message(chatStorage.save(answerMessage).getMessage())
+                .chatId(savedAnswer.getChatId())
+                .messageId(savedAnswer.getMessageId())
+                .message(savedAnswer.getMessage())
                 .usage(gptResponse.getUsage())
                 .build();
     }
@@ -96,8 +100,11 @@ public class ChatGptServiceImpl implements ChatGptService {
                     final List<Choice> choices = gptResponse.getChoices();
                     final GptMessage answer = choices.get(choices.size() - 1).getMessage();
                     final ChatMessage answerMessage = convert(chatId, answer);
+                    final ChatMessage savedAnswer = chatStorage.save(answerMessage);
                     return AnswerMessage.builder()
-                            .message(chatStorage.save(answerMessage).getMessage())
+                            .chatId(savedAnswer.getChatId())
+                            .messageId(savedAnswer.getMessageId())
+                            .message(savedAnswer.getMessage())
                             .usage(gptResponse.getUsage())
                             .build();
                 }

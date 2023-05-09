@@ -7,6 +7,7 @@ import dev.struchkov.openai.quarkus.context.data.ChatGptStorage;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -37,6 +38,11 @@ public class ChatGptLocalStorage implements ChatGptStorage {
             messageMap.get(chatMessage.getChatId()).put(uuid, chatMessage);
             return chatMessage;
         });
+    }
+
+    @Override
+    public Uni<ChatMessage> findMessageById(UUID chatId, UUID messageId) {
+        return Uni.createFrom().item(messageMap.get(chatId).get(messageId));
     }
 
     @Override
@@ -82,6 +88,11 @@ public class ChatGptLocalStorage implements ChatGptStorage {
             }
             return null;
         });
+    }
+
+    @Override
+    public Uni<Void> deleteAllByChatIdAndDateAdded(UUID chatId, LocalDateTime dateAdded) {
+        return null;
     }
 
 }
