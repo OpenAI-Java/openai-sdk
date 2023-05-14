@@ -15,7 +15,6 @@ import java.util.List;
 public class GptResponse {
 
     private String id;
-//    private String text;
     private String object;
     private Long created;
     private GPTModel model;

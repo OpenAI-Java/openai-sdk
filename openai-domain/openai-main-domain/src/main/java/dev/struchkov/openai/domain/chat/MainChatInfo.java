@@ -1,5 +1,6 @@
 package dev.struchkov.openai.domain.chat;
 
+import dev.struchkov.openai.domain.model.gpt.GPTModel;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,8 @@ import java.util.UUID;
 public class MainChatInfo {
 
     protected UUID chatId;
+
+    protected GPTModel gptModel;
 
     /**
      * Ограничение контекста обсуждения. Задает сколько всего сообщений сохраняется в чате. Старые сообщения постепенно удаляются.

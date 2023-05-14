@@ -28,6 +28,7 @@ public class DefaultChatGptServiceImpl extends AbstractChatGptService<MainChatIn
         mainChatInfo.setUserId(createChat.getUserId());
         mainChatInfo.setContextConstraint(createChat.getContextConstraint());
         mainChatInfo.setSystemBehavior(createChat.getSystemBehavior());
+        mainChatInfo.setGptModel(createChat.getGptModel());
         return chatStorage.save(mainChatInfo)
                 .invoke(chatInfo -> log.debug("Был создан новый чат: {}", chatInfo));
     }
@@ -39,6 +40,7 @@ public class DefaultChatGptServiceImpl extends AbstractChatGptService<MainChatIn
                     existChatInfo.setSystemBehavior(updateChat.getSystemBehavior());
                     existChatInfo.setContextConstraint(updateChat.getContextConstraint());
                     existChatInfo.setTemperature(updateChat.getTemperature());
+                    existChatInfo.setGptModel(updateChat.getGptModel());
                     return chatStorage.save(existChatInfo);
                 });
     }

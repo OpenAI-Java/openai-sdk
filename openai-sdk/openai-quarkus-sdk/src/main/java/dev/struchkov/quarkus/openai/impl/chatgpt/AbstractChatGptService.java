@@ -1,11 +1,10 @@
 package dev.struchkov.quarkus.openai.impl.chatgpt;
 
+import dev.struchkov.openai.domain.chat.ChatMessage;
 import dev.struchkov.openai.domain.chat.CreateMainChat;
 import dev.struchkov.openai.domain.chat.MainChatInfo;
-import dev.struchkov.openai.domain.chat.ChatMessage;
 import dev.struchkov.openai.domain.common.GptMessage;
 import dev.struchkov.openai.domain.message.AnswerMessage;
-import dev.struchkov.openai.domain.model.gpt.GPT3Model;
 import dev.struchkov.openai.domain.request.GptRequest;
 import dev.struchkov.openai.domain.response.Choice;
 import dev.struchkov.openai.domain.response.GptResponse;
@@ -109,25 +108,6 @@ public abstract class AbstractChatGptService<T extends MainChatInfo, D extends C
                 .invoke(() -> log.debug("Контекст чата очищен: {}", chatId));
     }
 
-    @Override
-    public Uni<AnswerMessage> sendSingleMessage(String message) {
-        return client.executeChat(
-                GptRequest.builder()
-                        .model(GPT3Model.GPT_3_5_TURBO)
-                        .messages(List.of(
-                                GptMessage.fromUser(message)
-                        ))
-                        .build()
-        ).map(gptResponse -> {
-            final List<Choice> choices = gptResponse.getChoices();
-            final GptMessage gptAnswer = choices.get(choices.size() - 1).getMessage();
-            return AnswerMessage.builder()
-                    .message(gptAnswer.getContent())
-                    .usage(gptResponse.getUsage())
-                    .build();
-        });
-    }
-
     private Uni<ChatMessage> createNewUserChatMessage(@NotNull String message, MainChatInfo mainChatInfo) {
         return chatStorage.save(
                 ChatMessage.builder()
@@ -146,7 +126,7 @@ public abstract class AbstractChatGptService<T extends MainChatInfo, D extends C
                                 .messages(gptMessages)
                                 .temperature(mainChatInfo.getTemperature())
                                 .user(mainChatInfo.getUserId())
-                                .model(GPT3Model.GPT_3_5_TURBO)
+                                .model(mainChatInfo.getGptModel())
                                 .stream(stream)
                                 .build()
                 );

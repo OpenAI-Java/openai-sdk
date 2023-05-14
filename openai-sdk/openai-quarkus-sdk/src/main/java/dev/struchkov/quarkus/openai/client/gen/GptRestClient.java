@@ -28,6 +28,12 @@ import javax.ws.rs.core.MediaType;
 public interface GptRestClient {
 
     @POST
+    @Path("/completions")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<GptResponse> getCompletion(GptRequest request);
+
+    @POST
     @Path("/chat/completions")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

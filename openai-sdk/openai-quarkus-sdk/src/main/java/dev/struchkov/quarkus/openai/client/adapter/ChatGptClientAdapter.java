@@ -19,10 +19,17 @@ public class ChatGptClientAdapter implements GPTClient {
     private final GptRestClient client;
 
     @Override
+    public Uni<GptResponse> executeCompletion(@NonNull GptRequest request) {
+        log.trace("Получен запрос к ChatGPT: {}", request);
+        return client.getCompletion(request)
+                .invoke(response -> log.trace("Получен ответ отChatGpt: {}", response));
+    }
+
+    @Override
     public Uni<GptResponse> executeChat(@NonNull GptRequest request) {
         log.trace("Получен запрос к ChatGPT: {}", request);
         return client.getChatCompletion(request)
-                .invoke(response -> log.trace("Получен ответ отChatGpt: {}", response));
+                .invoke(response -> log.trace("Получен ответ от ChatGpt: {}", response));
     }
 
     @Override

@@ -31,11 +31,4 @@ public interface MainChatGptService<T extends MainChatInfo, D extends CreateMain
 
     Uni<Void> clearContext(@NonNull UUID chatId);
 
-    //TODO [01.05.2023|uPagge]: Возможно нужно куда-то перенести этот метод
-
-    /**
-     * Позволяет выполнить одиночный запрос без создания чата.
-     */
-    Uni<AnswerMessage> sendSingleMessage(String message);
-
 }

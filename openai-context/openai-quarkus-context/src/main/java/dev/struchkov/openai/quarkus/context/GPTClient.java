@@ -9,6 +9,8 @@ import lombok.NonNull;
 
 public interface GPTClient {
 
+    Uni<GptResponse> executeCompletion(@NonNull GptRequest gptRequest);
+
     Uni<GptResponse> executeChat(@NonNull GptRequest gptRequest);
 
     Multi<GptResponse> executeChatStream(@NonNull GptRequest gptRequest);

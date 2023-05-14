@@ -28,6 +28,11 @@ public class GptRequest {
 
     private GPTModel model;
 
+    private String prompt;
+
+    @JsonProperty("max_tokens")
+    private Integer maxTokens;
+
     private Double temperature;
 
     private List<GptMessage> messages;
@@ -51,8 +56,6 @@ public class GptRequest {
     private Map<Long, Long> logitBias;
 
     private String user;
-
-    private String prompt;
 
     private PictureSize size;
 

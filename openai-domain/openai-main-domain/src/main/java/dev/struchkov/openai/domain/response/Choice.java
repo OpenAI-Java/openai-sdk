@@ -14,6 +14,7 @@ import lombok.ToString;
 public class Choice {
 
     private GptMessage message;
+    private String text;
     private Delta delta;
     @JsonProperty("finish_reason")
     private String finishReason;

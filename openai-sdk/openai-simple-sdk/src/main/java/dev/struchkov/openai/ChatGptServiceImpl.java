@@ -33,6 +33,7 @@ public class ChatGptServiceImpl implements ChatGptService {
     @Override
     public MainChatInfo createChat(CreateMainChat createChat) {
         final MainChatInfo mainChatInfo = new MainChatInfo();
+        mainChatInfo.setGptModel(createChat.getGptModel());
         mainChatInfo.setContextConstraint(createChat.getContextConstraint());
         mainChatInfo.setSystemBehavior(createChat.getSystemBehavior());
         mainChatInfo.setChatId(createChat.getChatId());
@@ -46,6 +47,7 @@ public class ChatGptServiceImpl implements ChatGptService {
         oldMainChatInfo.setSystemBehavior(updateChat.getSystemBehavior());
         oldMainChatInfo.setContextConstraint(updateChat.getContextConstraint());
         oldMainChatInfo.setTemperature(updateChat.getTemperature());
+        oldMainChatInfo.setGptModel(updateChat.getGptModel());
         return chatStorage.save(oldMainChatInfo);
     }
 
@@ -63,7 +65,7 @@ public class ChatGptServiceImpl implements ChatGptService {
         final GptResponse gptResponse = gptClient.execute(
                 GptRequest.builder()
                         .messages(gptMessages)
-                        .model(GPT3Model.GPT_3_5_TURBO)
+                        .model(mainChatInfo.getGptModel())
                         .build()
         );
 
@@ -93,7 +95,7 @@ public class ChatGptServiceImpl implements ChatGptService {
         return gptClient.executeAsync(
                 GptRequest.builder()
                         .messages(gptMessages)
-                        .model(GPT3Model.GPT_3_5_TURBO)
+                        .model(mainChatInfo.getGptModel())
                         .build()
         ).thenApply(
                 gptResponse -> {
