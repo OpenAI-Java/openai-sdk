@@ -8,7 +8,6 @@ import dev.struchkov.openai.domain.chat.CreateMainChat;
 import dev.struchkov.openai.domain.chat.MainChatInfo;
 import dev.struchkov.openai.domain.common.GptMessage;
 import dev.struchkov.openai.domain.message.AnswerMessage;
-import dev.struchkov.openai.domain.model.gpt.GPT3Model;
 import dev.struchkov.openai.domain.request.GptRequest;
 import dev.struchkov.openai.domain.response.Choice;
 import dev.struchkov.openai.domain.response.GptResponse;

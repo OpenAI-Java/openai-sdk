@@ -5,7 +5,7 @@ import dev.struchkov.openai.domain.response.error.GptErrorResponse;
 import dev.struchkov.openai.exception.gpt.OpenAIGptApiException;
 import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 public class ExceptionMapper implements ResponseExceptionMapper<Exception> {
 

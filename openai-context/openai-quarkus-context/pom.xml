@@ -20,7 +20,6 @@
             <groupId>dev.struchkov.openai</groupId>
             <artifactId>openai-main-domain</artifactId>
         </dependency>
-
     </dependencies>
 
 </project>
