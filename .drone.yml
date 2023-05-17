@@ -15,7 +15,7 @@ volumes:
 steps:
 
   - name: publish
-    image: maven:3.8.5-openjdk-17
+    image: maven:3.9-eclipse-temurin-17-alpine
     privileged: true
     volumes:
       - name: m2
@@ -44,7 +44,7 @@ volumes:
 steps:
 
   - name: publish maven central
-    image: maven:3.8.5-openjdk-17
+    image: maven:3.9-eclipse-temurin-17-alpine
     privileged: true
     volumes:
       - name: m2
@@ -57,6 +57,7 @@ steps:
       GPG_PASSPHRASE:
         from_secret: GPG_PASSPHRASE
     commands:
+      - apk add gnupg
       - echo "$GPG_PRIVATE_KEY" >> gpg.key
       - echo "$MAVEN_SETTINGS" >> maven-settings.xml
       - gpg --pinentry-mode loopback --passphrase $GPG_PASSPHRASE --import gpg.key
@@ -79,7 +80,7 @@ volumes:
 steps:
 
   - name: publish struchkov nexus
-    image: maven:3.8.5-openjdk-17
+    image: maven:3.9-eclipse-temurin-17-alpine
     privileged: true
     volumes:
       - name: m2
@@ -92,6 +93,7 @@ steps:
       GPG_PASSPHRASE:
         from_secret: GPG_PASSPHRASE
     commands:
+      - apk add gnupg
       - echo "$GPG_PRIVATE_KEY" >> gpg.key
       - echo "$MAVEN_SETTINGS" >> maven-settings.xml
       - gpg --pinentry-mode loopback --passphrase $GPG_PASSPHRASE --import gpg.key
@@ -144,6 +146,6 @@ steps:
 #      path: /drone/volume/mkdocs_cache/godfather_telegram/spring/ru
 ---
 kind: signature
-hmac: c42327421105822e775fa0a4a1ecaa4f17e276e2f9ef2c7922d28b4da7bb74b2
+hmac: 705532605ac2220cece5d2bba35763bb865eb8443e9d4c673682b1db5ec31e65
 
 ...
