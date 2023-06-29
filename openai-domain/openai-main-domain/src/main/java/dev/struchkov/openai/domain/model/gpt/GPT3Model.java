@@ -12,7 +12,9 @@ import java.util.Arrays;
 public enum GPT3Model implements GPTModel {
 
     GPT_3_5_TURBO("gpt-3.5-turbo", 0.000002),
-    GPT_3_5_TURBO_0301("gpt-3.5-turbo-0301", 0.000002),
+    GPT_3_5_TURBO_16K("gpt-3.5-turbo-16k", 0.000002),
+    GPT_3_5_TURBO_0613("gpt-3.5-turbo-0613", 0.000002),
+    GPT_3_5_TURBO_16K_0613("gpt-3.5-turbo-16k-0613", 0.000002),
     TEXT_DAVINCI_003("text-davinci-003", 0.000002),
     TEXT_DAVINCI_002("text-davinci-002", 0.000002);
 
