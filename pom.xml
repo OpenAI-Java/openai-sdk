@@ -35,33 +35,36 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <quarkus.version>3.0.3.Final</quarkus.version>
+        <!-- https://mvnrepository.com/artifact/io.quarkus/quarkus-bom -->
+        <quarkus.version>3.5.3</quarkus.version>
+        <!-- https://mvnrepository.com/artifact/dev.struchkov.haiti/haiti-utils -->
         <haiti.version>3.0.2</haiti.version>
 
         <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
-        <okhttp.version>4.11.0</okhttp.version>
+        <okhttp.version>4.12.0</okhttp.version>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-        <lombok.version>1.18.26</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <!-- https://mvnrepository.com/artifact/com.github.f4b6a3/uuid-creator -->
-        <uuid.creator.version>5.3.2</uuid.creator.version>
+        <uuid.creator.version>5.3.5</uuid.creator.version>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-        <jackson.version>2.15.0</jackson.version>
+        <jackson.version>2.16.0</jackson.version>
         <!-- https://mvnrepository.com/artifact/io.smallrye.reactive/smallrye-mutiny-vertx-core -->
-        <smallrye.mutiny.vertx.core.version>3.3.0</smallrye.mutiny.vertx.core.version>
+        <smallrye.mutiny.vertx.core.version>3.5.0</smallrye.mutiny.vertx.core.version>
 
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
         <plugin.maven.compiler.ver>3.11.0</plugin.maven.compiler.ver>
         <!-- https://mvnrepository.com/artifact/org.sonatype.plugins/nexus-staging-maven-plugin -->
         <plugin.nexus.staging.ver>1.6.13</plugin.nexus.staging.ver>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-source-plugin -->
-        <plugin.maven.source.ver>3.2.1</plugin.maven.source.ver>
+        <plugin.maven.source.ver>3.3.0</plugin.maven.source.ver>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-javadoc-plugin -->
-        <plugin.maven.javadoc.ver>3.5.0</plugin.maven.javadoc.ver>
+        <plugin.maven.javadoc.ver>3.6.2</plugin.maven.javadoc.ver>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-gpg-plugin -->
         <plugin.maven.gpg.ver>3.1.0</plugin.maven.gpg.ver>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-release-plugin -->
-        <plugin.maven.release.ver>3.0.0</plugin.maven.release.ver>
-        <plugin.maven.jandex.version>3.1.1</plugin.maven.jandex.version>
+        <plugin.maven.release.ver>3.0.1</plugin.maven.release.ver>
+        <!-- https://mvnrepository.com/artifact/io.smallrye/jandex -->
+        <plugin.maven.jandex.version>3.1.6</plugin.maven.jandex.version>
     </properties>
 
     <dependencyManagement>
@@ -139,8 +142,6 @@
             </dependency>
 
             <!--/sdk-->
-
-            <!-- https://mvnrepository.com/artifact/dev.struchkov.haiti/haiti-utils -->
             <dependency>
                 <groupId>dev.struchkov.haiti</groupId>
                 <artifactId>haiti-utils</artifactId>
