@@ -21,7 +21,7 @@ public class CreateMainChat {
      */
     protected UUID chatId;
 
-    protected GPTModel gptModel = GPT3Model.GPT_3_5_TURBO;
+    protected String gptModel = "gpt-4";
 
     /**
      * Ограничение контекста обсуждения. Задает сколько всего сообщений сохраняется в чате. Старые сообщения постепенно удаляются.

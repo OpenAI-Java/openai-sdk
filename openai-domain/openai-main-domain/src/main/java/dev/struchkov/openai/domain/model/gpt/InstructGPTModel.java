@@ -22,11 +22,6 @@ public enum InstructGPTModel implements GPTModel {
                 .findFirst().orElse(null);
     }
 
-    @Override
-    public double getPrice() {
-        return 0;
-    }
-
     @JsonValue
     public String getValue() {
         return value;

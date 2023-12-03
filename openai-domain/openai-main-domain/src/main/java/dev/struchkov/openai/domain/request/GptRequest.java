@@ -26,7 +26,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GptRequest {
 
-    private GPTModel model;
+    private String model;
 
     private String prompt;
 

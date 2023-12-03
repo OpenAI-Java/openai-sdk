@@ -19,9 +19,4 @@ public enum Whisper implements GPTModel {
         return value;
     }
 
-    @Override
-    public double getPrice() {
-        return price;
-    }
-
 }
